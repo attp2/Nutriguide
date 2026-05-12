@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1D9E75">
+<meta name="description" content="Calories, macros, vitamines et minéraux de tous vos aliments">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NutriGuide">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>NutriGuide — Nutrition complète</title>
+<style>
+:root{
+  --green:#1D9E75;--green-d:#0F6E56;--green-l:#E1F5EE;
+  --blue:#185FA5;--blue-l:#E6F1FB;
+  --amber:#854F0B;--amber-l:#FAEEDA;
+  --purple:#3C3489;--purple-l:#EEEDFE;
+  --red:#A32D2D;--red-l:#FCEBEB;
+  --teal:#0F6E56;--teal-l:#E1F5EE;
+  --gray:#5F5E5A;--gray-l:#F1EFE8;
+  --orange:#C05000;--orange-l:#FEF0E6;
+  --bg:#f4f6f8;--surface:#fff;
+  --text:#1a1a1a;--text2:#666;--border:#e2e2e2;
+  --r:12px;--r-sm:8px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0f0f0f;--surface:#1c1c1e;--text:#f2f2f7;--text2:#ababab;--border:#2c2c2e;
+    --green-l:#04342C;--blue-l:#042C53;--amber-l:#412402;--purple-l:#26215C;
+    --red-l:#501313;--teal-l:#04342C;--gray-l:#2C2C2A;--orange-l:#4A1E00;
+    --green:#5DCAA5;--blue:#85B7EB;--amber:#EF9F27;--purple:#AFA9EC;
+    --red:#F09595;--teal:#5DCAA5;--gray:#B4B2A9;--orange:#F0935A;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* HEADER */
+.header{background:#1D9E75;color:#fff;padding:14px 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.app-icon{width:38px;height:38px;background:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.app-title{font-size:20px;font-weight:700}
+.app-sub{font-size:11px;color:rgba(255,255,255,.8)}
+.tabs{display:flex;gap:2px}
+.tab{flex:1;padding:14px 4px;border:none;background:transparent;color:rgba(255,255,255,.9);font-size:17px;font-weight:800;cursor:pointer;border-bottom:4px solid transparent;transition:all .2s;letter-spacing:0.3px}
+.tab.active{color:#fff;border-bottom-color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.15)}
+
+/* CONTENT */
+.content{padding:14px;max-width:700px;margin:0 auto}
+
+/* SEARCH */
+.search-box{position:relative;margin-bottom:12px}
+.search-box input{width:100%;padding:12px 16px 12px 44px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);font-size:15px;outline:none;transition:border-color .2s}
+.search-box input:focus{border-color:#1D9E75}
+.s-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--text2)}
+
+/* FILTERS */
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.fb{padding:6px 13px;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);color:var(--text2);font-size:13px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.fb.active{background:#1D9E75;color:#fff;border-color:#1D9E75;font-weight:500}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px;margin-bottom:18px}
+.pill{padding:9px 10px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;text-align:center;transition:all .15s}
+.pill:hover{border-color:#1D9E75}
+.pill.sel{border-color:#1D9E75;background:var(--green-l)}
+.pill .em{font-size:22px;display:block;margin-bottom:4px}
+.pill .nm{font-size:12px;color:var(--text);font-weight:500;line-height:1.3}
+
+/* CARD */
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.card-head{background:#1D9E75;padding:16px;display:flex;align-items:center;gap:14px}
+.card-em{font-size:32px;background:#fff;border-radius:var(--r-sm);width:56px;height:56px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-title{font-size:19px;font-weight:700;color:#fff}
+.card-sub{font-size:12px;color:rgba(255,255,255,.85);margin-top:2px}
+.card-body{padding:16px}
+
+/* KCAL + IG */
+.top-row{display:flex;gap:8px;margin-bottom:14px}
+.kcal-box{flex:1;background:linear-gradient(135deg,#1D9E75,#0F6E56);border-radius:var(--r-sm);padding:12px;text-align:center;color:#fff}
+.kcal-val{font-size:28px;font-weight:800}
+.kcal-lbl{font-size:11px;opacity:.9}
+.ig-box{flex:1;border-radius:var(--r-sm);padding:12px;text-align:center}
+.ig-low{background:var(--green-l);color:var(--teal)}
+.ig-med{background:var(--amber-l);color:var(--amber)}
+.ig-high{background:var(--red-l);color:var(--red)}
+.ig-zero{background:var(--gray-l);color:var(--gray)}
+.ig-val{font-size:24px;font-weight:800}
+.ig-lbl{font-size:11px;margin-top:2px}
+
+/* PORTION TOGGLE */
+.portion-toggle{display:flex;gap:6px;margin-bottom:14px;background:var(--bg);border-radius:20px;padding:4px}
+.pt-btn{flex:1;padding:7px;border:none;border-radius:16px;font-size:13px;cursor:pointer;background:transparent;color:var(--text2);transition:all .2s}
+.pt-btn.active{background:#1D9E75;color:#fff;font-weight:600}
+
+/* MACRO GRID */
+.macro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.macro-box{background:var(--bg);border-radius:var(--r-sm);padding:10px 8px;text-align:center}
+.macro-val{font-size:20px;font-weight:700;color:#1D9E75}
+.macro-lbl{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* BARS */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bar-lbl{font-size:12px;font-weight:500;color:var(--text);min-width:90px}
+.bar-wrap{flex:1;background:var(--bg);border-radius:4px;height:7px;overflow:hidden}
+.bar-fill{height:7px;border-radius:4px;transition:width .4s ease}
+.bar-prot{background:#185FA5}
+.bar-gluc{background:#EF9F27}
+.bar-lip{background:#A32D2D}
+.bar-fib{background:#1D9E75}
+.bar-val{font-size:12px;color:var(--text2);min-width:36px;text-align:right}
+
+/* SECTION */
+.sec{margin-bottom:16px}
+.sec-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500}
+.tg{background:var(--green-l);color:var(--teal)}
+.tb{background:var(--blue-l);color:var(--blue)}
+.tp{background:var(--purple-l);color:var(--purple)}
+.ta{background:var(--amber-l);color:var(--amber)}
+.tr{background:var(--red-l);color:var(--red)}
+.tt{background:var(--teal-l);color:var(--teal)}
+.tgr{background:var(--gray-l);color:var(--gray)}
+.to{background:var(--orange-l);color:var(--orange)}
+
+/* NUTRIENT TABLE */
+.nut-table{width:100%;border-collapse:collapse}
+.nut-table th{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;padding:6px 8px;border-bottom:2px solid var(--border);text-align:left}
+.nut-table td{padding:8px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.nut-table tr:last-child td{border-bottom:none}
+.nut-name{font-weight:600;color:var(--text)}
+.nut-role{color:var(--text2);font-size:12px}
+.lv{font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;white-space:nowrap;display:inline-block}
+.lv-h{background:var(--green-l);color:var(--teal)}
+.lv-m{background:var(--amber-l);color:var(--amber)}
+.lv-l{background:var(--gray-l);color:var(--gray)}
+
+/* COMPAT */
+.cp-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.cp-plus{background:var(--green-l);color:var(--teal);padding:4px 10px;border-radius:12px;font-size:12px;font-weight:500}
+.cp-minus{background:var(--red-l);color:var(--red);padding:4px 10px;border-radius:12px;font-size:12px;font-weight:500}
+
+/* DIET + ALLERG */
+.allerg-tag{background:var(--red-l);color:var(--red);padding:4px 10px;border-radius:10px;font-size:12px;font-weight:600}
+.diet-tag{padding:4px 10px;border-radius:10px;font-size:12px;font-weight:600}
+.dt-vegan{background:#E1F5EE;color:#0F6E56}
+.dt-veg{background:#E6F1FB;color:#185FA5}
+.dt-sg{background:#FAEEDA;color:#854F0B}
+.dt-sl{background:#EEEDFE;color:#3C3489}
+
+/* TIP */
+.tip{background:var(--blue-l);border-radius:var(--r-sm);padding:12px 14px}
+.tip-lbl{font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.tip-txt{font-size:13px;color:var(--text);line-height:1.6}
+
+/* INSTALL */
+.install-banner{background:var(--surface);border:1.5px solid #1D9E75;border-radius:var(--r);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.install-banner.hidden{display:none}
+.install-txt{flex:1;font-size:13px;color:var(--text)}
+.install-btn{background:#1D9E75;color:#fff;border:none;border-radius:var(--r-sm);padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
+.install-x{background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:0 4px}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:var(--text2);grid-column:1/-1}
+.empty-icon{font-size:40px;margin-bottom:10px}
+
+/* NSRC */
+.nsrc{margin-bottom:10px}
+.nsrc-lbl{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:5px}
+
+/* VITAMIN GROUP BADGE */
+.vit-group{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:700;margin-bottom:6px}
+.vg-vit{background:var(--amber-l);color:var(--amber)}
+.vg-min{background:var(--blue-l);color:var(--blue)}
+.vg-oli{background:var(--purple-l);color:var(--purple)}
+
+/* PAR VALEUR */
+.val-cat-btn{padding:8px 16px;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);color:var(--text2);font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;margin-bottom:4px}
+.val-cat-btn.active{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.val-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.val-table th{background:#1D9E75;color:#fff;padding:12px 10px;font-size:13px;font-weight:700;text-align:left;position:sticky;top:0}
+.val-table th.sorted{background:#0F6E56}
+.val-table td{padding:10px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.val-table tr:last-child td{border-bottom:none}
+.val-table tr:hover td{background:var(--green-l)}
+.val-num{font-weight:700;color:#1D9E75;text-align:right}
+.val-emoji{font-size:18px;margin-right:6px}
+.val-bar-wrap{width:80px;background:var(--bg);border-radius:4px;height:6px;display:inline-block;vertical-align:middle;margin-left:6px}
+.val-bar-fill{height:6px;border-radius:4px;background:#1D9E75;display:block}
+.val-unit{font-size:11px;color:var(--text2);font-weight:400}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="app-icon">🌿</div>
+    <div>
+      <div class="app-title">NutriGuide</div>
+      <div class="app-sub">Calories • Macros • Vitamines • Minéraux • Oligo-éléments</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('aliment')">🥕 Par aliment</button>
+    <button class="tab" onclick="switchTab('valeur')">📊 Par valeur</button>
+    <button class="tab" onclick="switchTab('nutriment')">💊 Par nutriment</button>
+  </div>
+</div>
+
+<div class="content">
+  <div id="install-banner" class="install-banner hidden">
+    <div class="install-txt">📲 Installer NutriGuide sur votre écran d'accueil</div>
+    <button class="install-btn" onclick="installApp()">Installer</button>
+    <button class="install-x" onclick="document.getElementById('install-banner').classList.add('hidden')">×</button>
+  </div>
+
+  <div id="tab-aliment">
+    <div class="search-box"><span class="s-icon">🔍</span><input type="search" id="sa" placeholder="Carotte, saumon, kiwi, amande..." oninput="filterA()"></div>
+    <div class="filters" id="fa"></div>
+    <div class="grid" id="ga"></div>
+    <div id="da"></div>
+  </div>
+
+  <div id="tab-nutriment" style="display:none">
+    <div class="search-box"><span class="s-icon">🔍</span><input type="search" id="sn" placeholder="Vitamine C, magnésium, zinc, oméga-3..." oninput="filterN()"></div>
+    <div class="filters" id="fn"></div>
+    <div class="grid" id="gn"></div>
+    <div id="dn"></div>
+  </div>
+
+  <div id="tab-valeur" style="display:none">
+    <div class="filters" id="fv"></div>
+    <div id="dv"></div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+let tab='aliment',selA=null,selN=null,catA='tous',catN='tous',por100=true;
+let deferredPrompt=null;
+
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('install-banner').classList.remove('hidden');});
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('install-banner').classList.add('hidden');});}}
+
+function switchTab(t){
+  tab=t;
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',
+    (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')));
+  document.getElementById('tab-aliment').style.display=t==='aliment'?'':'none';
+  document.getElementById('tab-valeur').style.display=t==='valeur'?'':'none';
+  document.getElementById('tab-nutriment').style.display=t==='nutriment'?'':'none';
+  if(t==='valeur') initV();
+}
+
+const igLabel=ig=>{if(!ig||ig===0)return{txt:'Protéine / Graisse',cls:'ig-zero'};if(ig<=40)return{txt:`IG bas (${ig})`,cls:'ig-low'};if(ig<=70)return{txt:`IG moyen (${ig})`,cls:'ig-med'};return{txt:`IG élevé (${ig})`,cls:'ig-high'};};
+const lvClass=l=>l==='high'?'lv-h':l==='med'?'lv-m':'lv-l';
+const lvTxt=l=>l==='high'?'⬆ Élevé':l==='med'?'➡ Moyen':'⬇ Traces';
+const catNut=n=>{const nm=n.toLowerCase();if(nm.includes('vitamine'))return{cls:'vg-vit',lbl:'Vitamine'};if(nm.includes('oméga')||nm.includes('sélénium')||nm.includes('iode')||nm.includes('cuivre')||nm.includes('manganèse')||nm.includes('chrome')||nm.includes('fluor')||nm.includes('choline')||nm.includes('egcg')||nm.includes('pipérine')||nm.includes('curcumine')||nm.includes('anthocyanes'))return{cls:'vg-oli',lbl:'Oligo-élément'};return{cls:'vg-min',lbl:'Minéral'};};
+const dietLabel={vegan:'🌱 Vegan',vegetarien:'🥗 Végétarien','sansgluten':'🌾 Sans gluten','sanslactose':'🥛 Sans lactose'};
+const dietClass={vegan:'dt-vegan',vegetarien:'dt-veg','sansgluten':'dt-sg','sanslactose':'dt-sl'};
+const allerLabel={poisson:'🐟 Poisson',crustaces:'🦐 Crustacés',mollusques:'🦪 Mollusques',oeufs:'🥚 Œufs',lait:'🥛 Lait',gluten:'🌾 Gluten',soja:'🫘 Soja',arachides:'🥜 Arachides',fruits_coque:'🌰 Fruits à coque',celeri:'Céleri'};
+
+// ── ALIMENTS ──
+const catALabels={tous:'Tous',legume:'🥦 Légumes',fruit:'🍎 Fruits',viande:'🥩 Viandes & Poissons',fromage:'🧀 Fromages',laitier:'🥛 Laitiers & Œufs',cereale:'🌾 Céréales & Noix',gras:'🫒 Matières grasses',epice:'🌿 Épices & Herbes',boisson:'☕ Boissons',charcuterie:'🥩 Charcuterie'};
+
+function initA(){
+  document.getElementById('fa').innerHTML=Object.entries(catALabels).map(([k,v])=>`<button class="fb${k==='tous'?' active':''}" onclick="setCatA('${k}',this)">${v}</button>`).join('');
+  renderA();
+}
+function setCatA(cat,btn){catA=cat;selA=null;document.getElementById('da').innerHTML='';document.querySelectorAll('#fa .fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderA();}
+function filterA(){selA=null;document.getElementById('da').innerHTML='';renderA();}
+function renderA(){
+  const term=document.getElementById('sa').value.toLowerCase().trim();
+  const grid=document.getElementById('ga');
+  const items=ALIMENTS.filter(a=>(catA==='tous'||a.cat===catA)&&(!term||a.nom.toLowerCase().includes(term)));
+  if(!items.length){grid.innerHTML='<div class="empty"><div class="empty-icon">🔎</div><p>Aucun aliment trouvé</p></div>';return;}
+  grid.innerHTML=items.map(a=>`<div class="pill${selA===a.id?' sel':''}" onclick="showA('${a.id}')"><span class="em">${a.emoji}</span><span class="nm">${a.nom}</span></div>`).join('');
+}
+
+function getVals(a,p100){
+  const v=a.val,pf=a.portion.g/100;
+  if(p100)return{...v};
+  return{kcal:Math.round(v.kcal*pf),prot:+(v.prot*pf).toFixed(1),gluc:+(v.gluc*pf).toFixed(1),lip:+(v.lip*pf).toFixed(1),fibres:+(v.fibres*pf).toFixed(1),sucres:+(v.sucres*pf).toFixed(1),ig:v.ig};
+}
+
+function macroHTML(vv){
+  const total=Math.max(vv.prot+vv.gluc+vv.lip,1);
+  const bar=(pct,cls)=>`<div class="bar-wrap"><div class="bar-fill ${cls}" style="width:${Math.min(100,pct)}%"></div></div>`;
+  return `
+    <div class="macro-grid">
+      <div class="macro-box"><div class="macro-val">${vv.prot}g</div><div class="macro-lbl">Protéines</div></div>
+      <div class="macro-box"><div class="macro-val">${vv.gluc}g</div><div class="macro-lbl">Glucides</div></div>
+      <div class="macro-box"><div class="macro-val">${vv.lip}g</div><div class="macro-lbl">Lipides</div></div>
+    </div>
+    <div class="sec">
+      <div class="bar-row"><div class="bar-lbl">Protéines</div>${bar(vv.prot/total*100,'bar-prot')}<div class="bar-val">${vv.prot}g</div></div>
+      <div class="bar-row"><div class="bar-lbl">Glucides</div>${bar(vv.gluc/total*100,'bar-gluc')}<div class="bar-val">${vv.gluc}g</div></div>
+      <div class="bar-row"><div class="bar-lbl" style="padding-left:12px">dont sucres</div>${bar(vv.sucres/total*100,'bar-gluc')}<div class="bar-val" style="color:var(--amber)">${vv.sucres}g</div></div>
+      <div class="bar-row"><div class="bar-lbl">Lipides</div>${bar(vv.lip/total*100,'bar-lip')}<div class="bar-val">${vv.lip}g</div></div>
+      <div class="bar-row"><div class="bar-lbl">Fibres</div>${bar(vv.fibres/total*100,'bar-fib')}<div class="bar-val">${vv.fibres}g</div></div>
+    </div>`;
+}
+
+function showA(id){
+  selA=id;renderA();
+  const a=ALIMENTS.find(x=>x.id===id);
+  const ig=igLabel(a.val.ig);
+  const vv=getVals(a,por100);
+  const allerStr=a.allergenes.length?a.allergenes.map(al=>`<span class="allerg-tag">${allerLabel[al]||al}</span>`).join(''):'<span style="font-size:13px;color:var(--text2)">✅ Aucun allergène majeur</span>';
+  const dietStr=a.tags.map(t=>`<span class="diet-tag ${dietClass[t]}">${dietLabel[t]}</span>`).join('');
+
+  // Group vitamins by type
+  const vitamines=a.nutri.filter(n=>n.n.toLowerCase().includes('vitamine'));
+  const oligos=a.nutri.filter(n=>!n.n.toLowerCase().includes('vitamine')&&['sélénium','iode','cuivre','manganèse','chrome','fluor','zinc','oméga','choline','egcg','pipérine','curcumine','anthocyanes','acides gras','cla'].some(o=>n.n.toLowerCase().includes(o)));
+  const mineraux=a.nutri.filter(n=>!n.n.toLowerCase().includes('vitamine')&&!oligos.includes(n));
+
+  function nutRows(arr){
+    return arr.map(n=>`<tr><td class="nut-name">${n.n}</td><td class="nut-role">${n.role}</td><td><span class="lv ${lvClass(n.lvl)}">${lvTxt(n.lvl)}</span></td></tr>`).join('');
+  }
+  function nutSection(arr,title,badge){
+    if(!arr.length)return'';
+    return`<div style="margin-bottom:10px">
+      <span class="vit-group ${badge}">${title}</span>
+      <table class="nut-table"><thead><tr><th>Nutriment</th><th>Rôle</th><th>Teneur</th></tr></thead><tbody>${nutRows(arr)}</tbody></table>
+    </div>`;
+  }
+
+  document.getElementById('da').innerHTML=`
+  <div class="card">
+    <div class="card-head">
+      <div class="card-em">${a.emoji}</div>
+      <div><div class="card-title">${a.nom}</div><div class="card-sub">Portion : ${a.portion.label} (${a.portion.g}g)</div></div>
+    </div>
+    <div class="card-body">
+      <div class="portion-toggle">
+        <button class="pt-btn${por100?' active':''}" id="btn100" onclick="togglePor(true,'${id}')">Pour 100g</button>
+        <button class="pt-btn${!por100?' active':''}" id="btnpor" onclick="togglePor(false,'${id}')">Portion (${a.portion.g}g)</button>
+      </div>
+
+      <div id="macro-content">
+        <div class="top-row">
+          <div class="kcal-box"><div class="kcal-val">${vv.kcal}</div><div class="kcal-lbl">kcal</div></div>
+          <div class="ig-box ${ig.cls}"><div class="ig-val">${a.val.ig||'—'}</div><div class="ig-lbl">${ig.txt}</div></div>
+        </div>
+        ${macroHTML(vv)}
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Vitamines, minéraux & oligo-éléments</div>
+        ${nutSection(vitamines,'💊 Vitamines','vg-vit')}
+        ${nutSection(mineraux,'⚙️ Minéraux','vg-min')}
+        ${nutSection(oligos,'🔬 Oligo-éléments','vg-oli')}
+        ${!a.nutri.length?'<p style="font-size:13px;color:var(--text2)">Données non disponibles</p>':''}
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Bienfaits principaux</div>
+        <div class="tags">${a.bienfaits.map(b=>`<span class="tag tb">${b}</span>`).join('')}</div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Régimes compatibles</div>
+        <div class="tags">${dietStr||'<span style="font-size:13px;color:var(--text2)">Non spécifié</span>'}</div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Allergènes</div>
+        <div class="tags">${allerStr}</div>
+      </div>
+
+      <div class="tip"><div class="tip-lbl">💡 Conseil nutrition</div><div class="tip-txt">${a.astuce}</div></div>
+    </div>
+  </div>`;
+  document.getElementById('da').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function togglePor(p100,id){
+  por100=p100;
+  const a=ALIMENTS.find(x=>x.id===id);
+  const vv=getVals(a,p100);
+  const ig=igLabel(a.val.ig);
+  document.getElementById('btn100').classList.toggle('active',p100);
+  document.getElementById('btnpor').classList.toggle('active',!p100);
+  document.getElementById('macro-content').innerHTML=`
+    <div class="top-row">
+      <div class="kcal-box"><div class="kcal-val">${vv.kcal}</div><div class="kcal-lbl">kcal</div></div>
+      <div class="ig-box ${ig.cls}"><div class="ig-val">${a.val.ig||'—'}</div><div class="ig-lbl">${ig.txt}</div></div>
+    </div>
+    ${macroHTML(vv)}`;
+}
+
+// ── NUTRIMENTS ──
+const catNLabels={tous:'Tous',vitamine:'💊 Vitamines',mineral:'⚙️ Minéraux',oligo:'🔬 Oligo-éléments'};
+
+function initN(){
+  document.getElementById('fn').innerHTML=Object.entries(catNLabels).map(([k,v])=>`<button class="fb${k==='tous'?' active':''}" onclick="setCatN('${k}',this)">${v}</button>`).join('');
+  renderN();
+}
+function setCatN(cat,btn){catN=cat;selN=null;document.getElementById('dn').innerHTML='';document.querySelectorAll('#fn .fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderN();}
+function filterN(){selN=null;document.getElementById('dn').innerHTML='';renderN();}
+function renderN(){
+  const term=document.getElementById('sn').value.toLowerCase().trim();
+  const grid=document.getElementById('gn');
+  const items=NUTRIMENTS.filter(n=>(catN==='tous'||n.cat===catN)&&(!term||n.nom.toLowerCase().includes(term)));
+  if(!items.length){grid.innerHTML='<div class="empty"><div class="empty-icon">🔎</div><p>Aucun nutriment trouvé</p></div>';return;}
+  grid.innerHTML=items.map(n=>`<div class="pill${selN===n.id?' sel':''}" onclick="showN('${n.id}')"><span class="em">${n.emoji}</span><span class="nm">${n.nom}</span></div>`).join('');
+}
+
+function showN(id){
+  selN=id;renderN();
+  const d=NUTRIMENTS.find(x=>x.id===id);
+  const srcSec=(arr,lbl,cls)=>arr&&arr.length?`<div class="nsrc"><div class="nsrc-lbl">${lbl}</div><div class="tags">${arr.map(s=>`<span class="tag ${cls}">${s}</span>`).join('')}</div></div>`:'';
+  document.getElementById('dn').innerHTML=`
+  <div class="card">
+    <div class="card-head">
+      <div class="card-em">${d.emoji}</div>
+      <div><div class="card-title">${d.nom}</div><div class="card-sub">Apport journalier recommandé : ${d.ajr}</div></div>
+    </div>
+    <div class="card-body">
+      <div class="sec">
+        <div class="sec-title">Bienfaits principaux</div>
+        <div class="tags">${d.bienfaits.map(b=>`<span class="tag tb">${b}</span>`).join('')}</div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Sources alimentaires</div>
+        ${srcSec(d.sources.vege,'🥦 Légumes','tg')}
+        ${srcSec(d.sources.fruit,'🍎 Fruits','ta')}
+        ${srcSec(d.sources.prot,'🥩 Protéines & laitiers','tp')}
+        ${srcSec(d.sources.grains,'🌾 Céréales, noix & légumineuses','tt')}
+        ${srcSec(d.sources.fats,'🫒 Matières grasses','tgr')}
+      </div>
+      <div class="sec">
+        <div class="sec-title">Signes de carence</div>
+        <div class="tags">${d.carence.map(c=>`<span class="tag tr">${c}</span>`).join('')}</div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Compatibilités</div>
+        ${d.compat_plus.length?`<div style="font-size:12px;color:var(--text2);margin-bottom:6px">✅ Synergie — favorise l'absorption</div><div class="cp-row">${d.compat_plus.map(c=>`<span class="cp-plus">+ ${c}</span>`).join('')}</div>`:''}
+        ${d.compat_minus.length?`<div style="font-size:12px;color:var(--text2);margin:10px 0 6px">⚠️ Antagonistes — à éviter ensemble</div><div class="cp-row">${d.compat_minus.map(c=>`<span class="cp-minus">− ${c}</span>`).join('')}</div>`:''}
+        ${!d.compat_plus.length&&!d.compat_minus.length?'<span style="font-size:13px;color:var(--text2)">Aucune interaction notable</span>':''}
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('dn').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+
+// ── PAR VALEUR ──
+const valeursConfig = [
+  {key:'prot',  label:'💪 Protéines',   unit:'g', color:'#185FA5', desc:'Classement des aliments les plus riches en protéines'},
+  {key:'fibres',label:'🌾 Fibres',       unit:'g', color:'#1D9E75', desc:'Classement des aliments les plus riches en fibres'},
+  {key:'kcal',  label:'🔥 Calories',     unit:'kcal', color:'#C05000', desc:'Classement des aliments les plus caloriques'},
+  {key:'lip',   label:'🫒 Lipides',      unit:'g', color:'#A32D2D', desc:'Classement des aliments les plus riches en lipides'},
+  {key:'gluc',  label:'🍞 Glucides',     unit:'g', color:'#854F0B', desc:'Classement des aliments les plus riches en glucides'},
+  {key:'sucres',label:'🍬 Sucres',       unit:'g', color:'#C05000', desc:'Classement des aliments les plus riches en sucres'},
+  {key:'kcal_asc', label:'⬇ Moins caloriques', unit:'kcal', color:'#0F6E56', desc:'Classement des aliments les moins caloriques', asc:true},
+];
+let valeurActive = 'prot';
+let valeurInited = false;
+
+function initV(){
+  if(!valeurInited){
+    // Créer les boutons de sous-catégorie
+    document.getElementById('fv').innerHTML =
+      valeursConfig.map(v =>
+        `<button class="val-cat-btn${v.key===valeurActive?' active':''}" onclick="setValeur('${v.key}',this)">${v.label}</button>`
+      ).join('');
+    valeurInited = true;
+  }
+  renderV();
+}
+
+function setValeur(key, btn){
+  valeurActive = key;
+  document.querySelectorAll('.val-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderV();
+}
+
+function renderV(){
+  const cfg = valeursConfig.find(v => v.key === valeurActive);
+  const key = cfg.asc ? 'kcal' : cfg.key;
+  const sorted = [...ALIMENTS]
+    .filter(a => a.val && (a.val[key] !== undefined))
+    .sort((a,b) => cfg.asc ? a.val[key]-b.val[key] : b.val[key]-a.val[key]);
+
+  const maxVal = sorted.length ? sorted[0].val[key] : 1;
+
+  const rows = sorted.map((a,i) => {
+    const val = a.val[key];
+    const pct = Math.min(100, (val / (maxVal||1)) * 100);
+    return `<tr onclick="switchTab('aliment');setCatA('tous',document.querySelector('#fa .fb'));document.getElementById('sa').value='';filterA();setTimeout(()=>showA('${a.id}'),100)" style="cursor:pointer">
+      <td><span style="color:var(--text2);font-size:12px">${i+1}</span></td>
+      <td><span class="val-emoji">${a.emoji}</span><strong>${a.nom}</strong><br><span style="font-size:11px;color:var(--text2)">${a.portion.label}</span></td>
+      <td class="val-num">${val}<span class="val-unit"> ${cfg.unit}</span>
+        <div class="val-bar-wrap"><span class="val-bar-fill" style="width:${pct}%;background:${cfg.color}"></span></div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('dv').innerHTML = `
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:0 2px">${cfg.desc} — cliquez sur un aliment pour voir sa fiche complète</p>
+    <div style="overflow-x:auto">
+    <table class="val-table">
+      <thead><tr>
+        <th style="width:36px">#</th>
+        <th>Aliment</th>
+        <th style="width:160px">${cfg.label} / 100g</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    </div>`;
+}
+
+initA();initN();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
