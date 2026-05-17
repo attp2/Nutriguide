@@ -42,7 +42,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .header-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .app-icon{width:38px;height:38px;background:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .app-title{font-size:20px;font-weight:700}
-.app-sub{font-size:12px;color:rgba(255, 255, 255, .9)}
+.app-sub{font-size:11px;color:rgba(255,255,255,.8)}
 .tabs{display:flex;gap:2px}
 .tab{flex:1;padding:14px 4px;border:none;background:transparent;color:rgba(255,255,255,.9);font-size:17px;font-weight:800;cursor:pointer;border-bottom:4px solid transparent;transition:all .2s;letter-spacing:0.3px}
 .tab.active{color:#fff;border-bottom-color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.15)}
@@ -204,13 +204,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="app-icon">🌿</div>
     <div>
       <div class="app-title">NutriGuide</div>
+      <div class="app-sub">Calories • Macros • Vitamines • Minéraux • Oligo-éléments</div>
       <div class="app-sub">Guide nutritionnel pour rechercher les aliments par produit, nutriment ou valeur et faire de meilleurs choix alimentaires.</div>
     </div>
   </div>
   <div class="tabs">
     <button class="tab active" onclick="switchTab('aliment')">🥕 Par aliment</button>
-    <button class="tab" onclick="switchTab('nutriment')">💊 Par nutriment</button>
     <button class="tab" onclick="switchTab('valeur')">📊 Par valeur</button>
+    <button class="tab" onclick="switchTab('nutriment')">💊 Par nutriment</button>
   </div>
 </div>
 
@@ -252,10 +253,10 @@ function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.
 function switchTab(t){
   tab=t;
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',
-    (i===0&&t==='aliment')||(i===1&&t==='nutriment')||(i===2&&t==='valeur')));
+    (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')));
   document.getElementById('tab-aliment').style.display=t==='aliment'?'':'none';
-  document.getElementById('tab-nutriment').style.display=t==='nutriment'?'':'none';
   document.getElementById('tab-valeur').style.display=t==='valeur'?'':'none';
+  document.getElementById('tab-nutriment').style.display=t==='nutriment'?'':'none';
   if(t==='valeur') initV();
 }
 
@@ -268,7 +269,7 @@ const dietClass={vegan:'dt-vegan',vegetarien:'dt-veg','sansgluten':'dt-sg','sans
 const allerLabel={poisson:'🐟 Poisson',crustaces:'🦐 Crustacés',mollusques:'🦪 Mollusques',oeufs:'🥚 Œufs',lait:'🥛 Lait',gluten:'🌾 Gluten',soja:'🫘 Soja',arachides:'🥜 Arachides',fruits_coque:'🌰 Fruits à coque',celeri:'Céleri'};
 
 // ── ALIMENTS ──
-const catALabels={tous:'Tous',legume:'🥦 Légumes',fruit:'🍎 Fruits',viande:'🥩 Viandes & Poissons',fromage:'🧀 Fromages',laitier:'🥛 Laitiers & Œufs',cereale:'🌾 Céréales & Noix',gras:'🫒 Matières grasses',epice:'🌿 Épices & Herbes',boisson:'☕ Boissons',charcuterie:'🥩 Charcuterie'};
+const catALabels={tous:'Tous',legume:'🥦 Légumes',fruit:'🍎 Fruits',viande:'🥩 Viandes & Poissons',fromage:'🧀 Fromages',laitier:'🥛 Laitiers & Œufs',cereale:'🌾 Céréales & Noix',pate:'🍝 Pâtes & Nouilles',riz:'🍚 Riz & Céréales cuites',petitdej:'🥣 Petit-déjeuner',legumineuse:'🫘 Légumineuses cuisinées',alcool:'🍺 Alcools',dessert:'🍰 Desserts & Sucreries',sucrant:'🍯 Sucrants',beurre:'🥜 Beurres & Purées',condiment:'🫙 Condiments & Sauces',platcuisine:'🍽️ Plats cuisinés',gras:'🫒 Matières grasses',epice:'🌿 Épices & Herbes',boisson:'☕ Boissons',charcuterie:'🥩 Charcuterie'};
 
 function initA(){
   document.getElementById('fa').innerHTML=Object.entries(catALabels).map(([k,v])=>`<button class="fb${k==='tous'?' active':''}" onclick="setCatA('${k}',this)">${v}</button>`).join('');
@@ -416,7 +417,57 @@ function renderN(){
 function showN(id){
   selN=id;renderN();
   const d=NUTRIMENTS.find(x=>x.id===id);
-  const srcSec=(arr,lbl,cls)=>arr&&arr.length?`<div class="nsrc"><div class="nsrc-lbl">${lbl}</div><div class="tags">${arr.map(s=>`<span class="tag ${cls}">${s}</span>`).join('')}</div></div>`:'';
+
+  // Générer les sources automatiquement depuis ALIMENTS
+  const motsCles = d.nom.toLowerCase().replace(/[()]/g,'').split(' ').filter(m=>m.length>3);
+  const alimsSources = ALIMENTS.filter(a=>
+    a.nutri && a.nutri.some(n=>{
+      const nn=n.n.toLowerCase();
+      return motsCles.some(m=>nn.includes(m));
+    })
+  ).sort((a,b)=>{
+    // Trier par niveau : high d'abord
+    const nA=a.nutri.find(n=>motsCles.some(m=>n.n.toLowerCase().includes(m)));
+    const nB=b.nutri.find(n=>motsCles.some(m=>n.n.toLowerCase().includes(m)));
+    const lvlScore={high:3,med:2,low:1};
+    return (lvlScore[nB&&nB.lvl]||0)-(lvlScore[nA&&nA.lvl]||0);
+  });
+
+  // Grouper par catégorie
+  const catLabels={'legume':'🥦 Légumes','fruit':'🍎 Fruits','viande':'🥩 Viandes & Poissons',
+    'fromage':'🧀 Fromages','laitier':'🥛 Laitiers & Œufs','cereale':'🌾 Céréales & Noix',
+    'pate':'🍝 Pâtes','riz':'🍚 Riz','petitdej':'🥣 Petit-déjeuner',
+    'legumineuse':'🫘 Légumineuses','alcool':'🍺 Alcools','dessert':'🍰 Desserts',
+    'sucrant':'🍯 Sucrants','beurre':'🥜 Beurres & Purées','condiment':'🫙 Condiments',
+    'platcuisine':'🍽️ Plats cuisinés','gras':'🫒 Matières grasses','epice':'🌿 Épices',
+    'boisson':'☕ Boissons','charcuterie':'🥩 Charcuterie'};
+
+  const bycat={};
+  alimsSources.forEach(a=>{
+    if(!bycat[a.cat]) bycat[a.cat]=[];
+    const nutri=a.nutri.find(n=>motsCles.some(m=>n.n.toLowerCase().includes(m)));
+    bycat[a.cat].push({nom:a.nom,emoji:a.emoji,lvl:nutri?nutri.lvl:'low',id:a.id});
+  });
+
+  const lvlColor={high:'#1D9E75',med:'#854F0B',low:'#5F5E5A'};
+  const lvlTxt={high:'Élevé',med:'Moyen',low:'Traces'};
+
+  let sourcesHTML='';
+  Object.entries(bycat).forEach(([cat,items])=>{
+    const lbl=catLabels[cat]||cat;
+    sourcesHTML+=`<div class="nsrc"><div class="nsrc-lbl">${lbl}</div><div class="tags">`;
+    items.forEach(item=>{
+      sourcesHTML+=`<span class="tag" style="background:var(--bg);border:1px solid var(--border);cursor:pointer" onclick="switchTab('aliment');setCatA('tous',document.querySelector('#fa .fb'));document.getElementById('sa').value='';filterA();setTimeout(()=>showA('${item.id}'),100)">
+        ${item.emoji} ${item.nom} <span style="font-size:10px;color:${lvlColor[item.lvl]};font-weight:700">(${lvlTxt[item.lvl]})</span>
+      </span>`;
+    });
+    sourcesHTML+='</div></div>';
+  });
+
+  if(!alimsSources.length){
+    sourcesHTML='<p style="font-size:13px;color:var(--text2)">Sources variées selon les aliments</p>';
+  }
+
   document.getElementById('dn').innerHTML=`
   <div class="card">
     <div class="card-head">
@@ -429,12 +480,8 @@ function showN(id){
         <div class="tags">${d.bienfaits.map(b=>`<span class="tag tb">${b}</span>`).join('')}</div>
       </div>
       <div class="sec">
-        <div class="sec-title">Sources alimentaires</div>
-        ${srcSec(d.sources.vege,'🥦 Légumes','tg')}
-        ${srcSec(d.sources.fruit,'🍎 Fruits','ta')}
-        ${srcSec(d.sources.prot,'🥩 Protéines & laitiers','tp')}
-        ${srcSec(d.sources.grains,'🌾 Céréales, noix & légumineuses','tt')}
-        ${srcSec(d.sources.fats,'🫒 Matières grasses','tgr')}
+        <div class="sec-title">Sources alimentaires — cliquer pour voir la fiche</div>
+        ${sourcesHTML}
       </div>
       <div class="sec">
         <div class="sec-title">Signes de carence</div>
