@@ -195,6 +195,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .val-bar-fill{height:6px;border-radius:4px;background:#1D9E75;display:block}
 .val-unit{font-size:11px;color:var(--text2);font-weight:400}
 
+
+/* GLOSSAIRE */
+.glos-cat-btn{padding:8px 18px;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);color:var(--text2);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;margin-bottom:6px}
+.glos-cat-btn.active{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.glos-intro{background:var(--green-l);border-radius:var(--r);padding:16px;margin-bottom:16px;font-size:13px;color:var(--text);line-height:1.7}
+.glos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:20px}
+.glos-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.05);cursor:pointer;transition:all .2s}
+.glos-card:hover{border-color:#1D9E75;transform:translateY(-2px)}
+.glos-card-head{padding:14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+.glos-card-emoji{font-size:28px;width:48px;height:48px;background:var(--bg);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.glos-card-title{font-size:16px;font-weight:700;color:var(--text)}
+.glos-card-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.glos-card-body{padding:12px 14px}
+.glos-role{font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px}
+.glos-ajr{display:inline-block;background:var(--green-l);color:var(--teal);padding:3px 10px;border-radius:10px;font-size:12px;font-weight:600;margin-bottom:10px}
+.glos-detail{display:none;padding:14px;border-top:1px solid var(--border)}
+.glos-detail.open{display:block}
+.glos-section{margin-bottom:12px}
+.glos-section-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.glos-sources{display:flex;flex-wrap:wrap;gap:5px}
+.glos-source{background:var(--amber-l);color:var(--amber);padding:3px 9px;border-radius:10px;font-size:12px;font-weight:500}
+.glos-carence{background:var(--red-l);color:var(--red);padding:3px 9px;border-radius:10px;font-size:12px;margin-bottom:4px;display:inline-block}
+.glos-conseil{background:var(--blue-l);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:var(--text);line-height:1.6}
+.glos-syn{background:var(--green-l);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:12px;font-weight:500;margin:2px}
+.glos-ant{background:var(--red-l);color:var(--red);padding:3px 9px;border-radius:10px;font-size:12px;font-weight:500;margin:2px}
+.glos-famille{background:var(--purple-l);color:var(--purple);padding:3px 9px;border-radius:10px;font-size:11px;font-weight:600}
+
 </style>
 </head>
 <body>
@@ -212,6 +239,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="tab active" onclick="switchTab('aliment')">🥕 Par aliment</button>
     <button class="tab" onclick="switchTab('valeur')">📊 Par valeur</button>
     <button class="tab" onclick="switchTab('nutriment')">💊 Par nutriment</button>
+    <button class="tab" onclick="switchTab('glossaire')">📖 Glossaire</button>
   </div>
 </div>
 
@@ -240,8 +268,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="filters" id="fv"></div>
     <div id="dv"></div>
   </div>
+
+  <div id="tab-glossaire" style="display:none">
+    <div class="filters" id="fg"></div>
+    <div id="dg"></div>
+  </div>
 </div>
 
+<script src="glossaire/glossaire.js"></script>
 <script src="data.js"></script>
 <script>
 let tab='aliment',selA=null,selN=null,catA='tous',catN='tous',por100=true;
@@ -253,11 +287,13 @@ function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.
 function switchTab(t){
   tab=t;
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',
-    (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')));
+    (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')||(i===3&&t==='glossaire')));
   document.getElementById('tab-aliment').style.display=t==='aliment'?'':'none';
   document.getElementById('tab-valeur').style.display=t==='valeur'?'':'none';
   document.getElementById('tab-nutriment').style.display=t==='nutriment'?'':'none';
+  document.getElementById('tab-glossaire').style.display=t==='glossaire'?'':'none';
   if(t==='valeur') initV();
+  if(t==='glossaire') initG();
 }
 
 const igLabel=ig=>{if(!ig||ig===0)return{txt:'Protéine / Graisse',cls:'ig-zero'};if(ig<=40)return{txt:`IG bas (${ig})`,cls:'ig-low'};if(ig<=70)return{txt:`IG moyen (${ig})`,cls:'ig-med'};return{txt:`IG élevé (${ig})`,cls:'ig-high'};};
@@ -269,8 +305,29 @@ const dietClass={vegan:'dt-vegan',vegetarien:'dt-veg','sansgluten':'dt-sg','sans
 const allerLabel={poisson:'🐟 Poisson',crustaces:'🦐 Crustacés',mollusques:'🦪 Mollusques',oeufs:'🥚 Œufs',lait:'🥛 Lait',gluten:'🌾 Gluten',soja:'🫘 Soja',arachides:'🥜 Arachides',fruits_coque:'🌰 Fruits à coque',celeri:'Céleri'};
 
 // ── ALIMENTS ──
-const catALabels={tous:'Tous',legume:'🥦 Légumes',fruit:'🍎 Fruits',viande:'🥩 Viandes & Poissons',fromage:'🧀 Fromages',laitier:'🥛 Laitiers & Œufs',cereale:'🌾 Céréales & Noix',pate:'🍝 Pâtes & Nouilles',riz:'🍚 Riz & Céréales cuites',petitdej:'🥣 Petit-déjeuner',legumineuse:'🫘 Légumineuses cuisinées',alcool:'🍺 Alcools',dessert:'🍰 Desserts & Sucreries',sucrant:'🍯 Sucrants',beurre:'🥜 Beurres & Purées',condiment:'🫙 Condiments & Sauces',platcuisine:'🍽️ Plats cuisinés',gras:'🫒 Matières grasses',epice:'🌿 Épices & Herbes',boisson:'☕ Boissons',charcuterie:'🥩 Charcuterie'};
-
+const catALabels={
+  tous:'Tous',
+  alcool:'🍺 Alcools',
+  beurre:'🥜 Beurres & Purées',
+  boisson:'☕ Boissons',
+  cereale:'🌾 Céréales & Noix',
+  charcuterie:'🥩 Charcuterie',
+  condiment:'🫙 Condiments & Sauces',
+  dessert:'🍰 Desserts & Sucreries',
+  epice:'🌿 Épices & Herbes',
+  fromage:'🧀 Fromages',
+  fruit:'🍎 Fruits',
+  gras:'🫒 Matières grasses',
+  laitier:'🥛 Laitiers & Œufs',
+  legume:'🥦 Légumes',
+  legumineuse:'🫘 Légumineuses cuisinées',
+  pate:'🍝 Pâtes & Nouilles',
+  petitdej:'🥣 Petit-déjeuner',
+  platcuisine:'🍽️ Plats cuisinés',
+  riz:'🍚 Riz & Céréales cuites',
+  sucrant:'🍯 Sucrants',
+  viande:'🥩 Viandes & Poissons',
+};
 function initA(){
   document.getElementById('fa').innerHTML=Object.entries(catALabels).map(([k,v])=>`<button class="fb${k==='tous'?' active':''}" onclick="setCatA('${k}',this)">${v}</button>`).join('');
   renderA();
@@ -398,7 +455,7 @@ function togglePor(p100,id){
 }
 
 // ── NUTRIMENTS ──
-const catNLabels={tous:'Tous',vitamine:'💊 Vitamines',mineral:'⚙️ Minéraux',oligo:'🔬 Oligo-éléments'};
+const catNLabels={tous:'Tous',mineral:'⚙️ Minéraux',oligo:'🔬 Oligo-éléments',vitamine:'💊 Vitamines'};
 
 function initN(){
   document.getElementById('fn').innerHTML=Object.entries(catNLabels).map(([k,v])=>`<button class="fb${k==='tous'?' active':''}" onclick="setCatN('${k}',this)">${v}</button>`).join('');
@@ -501,13 +558,13 @@ function showN(id){
 
 // ── PAR VALEUR ──
 const valeursConfig = [
-  {key:'prot',  label:'💪 Protéines',   unit:'g', color:'#185FA5', desc:'Classement des aliments les plus riches en protéines'},
-  {key:'fibres',label:'🌾 Fibres',       unit:'g', color:'#1D9E75', desc:'Classement des aliments les plus riches en fibres'},
-  {key:'kcal',  label:'🔥 Calories',     unit:'kcal', color:'#C05000', desc:'Classement des aliments les plus caloriques'},
-  {key:'lip',   label:'🫒 Lipides',      unit:'g', color:'#A32D2D', desc:'Classement des aliments les plus riches en lipides'},
-  {key:'gluc',  label:'🍞 Glucides',     unit:'g', color:'#854F0B', desc:'Classement des aliments les plus riches en glucides'},
-  {key:'sucres',label:'🍬 Sucres',       unit:'g', color:'#C05000', desc:'Classement des aliments les plus riches en sucres'},
-  {key:'kcal_asc', label:'⬇ Moins caloriques', unit:'kcal', color:'#0F6E56', desc:'Classement des aliments les moins caloriques', asc:true},
+  {key:'kcal',     label:'🔥 Calories (+ caloriques)',  unit:'kcal', color:'#C05000', desc:'Classement des aliments les plus caloriques'},
+  {key:'kcal_asc', label:'⬇ Calories (- caloriques)',  unit:'kcal', color:'#0F6E56', desc:'Classement des aliments les moins caloriques', asc:true},
+  {key:'fibres',   label:'🌾 Fibres',                   unit:'g',    color:'#1D9E75', desc:'Classement des aliments les plus riches en fibres'},
+  {key:'gluc',     label:'🍞 Glucides',                 unit:'g',    color:'#854F0B', desc:'Classement des aliments les plus riches en glucides'},
+  {key:'lip',      label:'🫒 Lipides',                  unit:'g',    color:'#A32D2D', desc:'Classement des aliments les plus riches en lipides'},
+  {key:'prot',     label:'💪 Protéines',                unit:'g',    color:'#185FA5', desc:'Classement des aliments les plus riches en protéines'},
+  {key:'sucres',   label:'🍬 Sucres',                   unit:'g',    color:'#C05000', desc:'Classement des aliments les plus riches en sucres'},
 ];
 let valeurActive = 'prot';
 let valeurInited = false;
@@ -564,6 +621,102 @@ function renderV(){
       <tbody>${rows}</tbody>
     </table>
     </div>`;
+}
+
+
+// ── GLOSSAIRE ──
+let glossaireInited = false;
+let glosCat = 'vitamine';
+let glosOpen = null;
+
+const glosCatLabels = {
+  mineral:  '⚙️ Minéraux',
+  oligo:    '🔬 Oligo-éléments & Acides gras',
+  vitamine: '💊 Vitamines'
+};
+
+function initG(){
+  if(!glossaireInited){
+    document.getElementById('fg').innerHTML =
+      Object.entries(glosCatLabels).map(([k,v])=>
+        `<button class="glos-cat-btn${k===glosCat?' active':''}" onclick="setGlosCat('${k}',this)">${v}</button>`
+      ).join('');
+    glossaireInited = true;
+  }
+  renderG();
+}
+
+function setGlosCat(cat, btn){
+  glosCat = cat;
+  glosOpen = null;
+  document.querySelectorAll('.glos-cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderG();
+}
+
+function toggleGlos(id){
+  glosOpen = glosOpen === id ? null : id;
+  renderG();
+}
+
+function renderG(){
+  const items = glosCat==='vitamine' ? GLOSSAIRE.vitamines :
+                glosCat==='mineral'  ? GLOSSAIRE.mineraux : GLOSSAIRE.oligos;
+  const intro = glosCat==='vitamine' ? GLOSSAIRE.intro.vitamines :
+                glosCat==='mineral'  ? GLOSSAIRE.intro.mineraux : GLOSSAIRE.intro.oligos;
+
+  let html = `<div class="glos-intro">${intro}</div><div class="glos-grid">`;
+
+  items.forEach(item => {
+    const isOpen = glosOpen === item.id;
+    const autresNoms = item.autresNoms ? item.autresNoms.join(', ') : '';
+    const symbole = item.symbole ? ` — ${item.symbole}` : '';
+
+    html += `<div class="glos-card" onclick="toggleGlos('${item.id}')">
+      <div class="glos-card-head">
+        <div class="glos-card-emoji">${item.emoji}</div>
+        <div>
+          <div class="glos-card-title">${item.nom}${symbole}</div>
+          <div class="glos-card-sub">${autresNoms}</div>
+          <span class="glos-famille">${item.famille}</span>
+        </div>
+      </div>
+      <div class="glos-card-body">
+        <div class="glos-ajr">AJR : ${item.ajr}</div>
+        <div class="glos-role">${item.role}</div>
+        <div class="glos-detail${isOpen?' open':''}">
+          <div class="glos-section">
+            <div class="glos-section-title">🏆 Meilleures sources</div>
+            <div class="glos-sources">${item.sources_top.map(s=>`<span class="glos-source">${s}</span>`).join('')}</div>
+          </div>
+          <div class="glos-section">
+            <div class="glos-section-title">⚠️ Signes de carence</div>
+            <div>${item.carence}</div>
+          </div>
+          <div class="glos-section">
+            <div class="glos-section-title">🚫 Excès</div>
+            <div style="font-size:13px;color:var(--text)">${item.exces}</div>
+          </div>
+          <div class="glos-section">
+            <div class="glos-section-title">✅ Synergies</div>
+            <div>${item.synergies.map(s=>`<span class="glos-syn">+ ${s}</span>`).join('') || '<span style="font-size:12px;color:var(--text2)">Aucune interaction notable</span>'}</div>
+          </div>
+          ${item.antagonistes && item.antagonistes.length ? `<div class="glos-section">
+            <div class="glos-section-title">⛔ Antagonistes</div>
+            <div>${item.antagonistes.map(s=>`<span class="glos-ant">− ${s}</span>`).join('')}</div>
+          </div>` : ''}
+          <div class="glos-conseil">
+            <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;margin-bottom:4px">💡 Conseil</div>
+            ${item.conseil}
+          </div>
+        </div>
+        <div style="text-align:center;font-size:12px;color:var(--text2);margin-top:6px">${isOpen?'▲ Réduire':'▼ Voir les détails'}</div>
+      </div>
+    </div>`;
+  });
+
+  html += '</div>';
+  document.getElementById('dg').innerHTML = html;
 }
 
 initA();initN();
