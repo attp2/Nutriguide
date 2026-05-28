@@ -222,6 +222,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .glos-ant{background:var(--red-l);color:var(--red);padding:3px 9px;border-radius:10px;font-size:12px;font-weight:500;margin:2px}
 .glos-famille{background:var(--purple-l);color:var(--purple);padding:3px 9px;border-radius:10px;font-size:11px;font-weight:600}
 
+
+/* FLÈCHE RETOUR */
+.back-btn{display:none;align-items:center;gap:8px;padding:10px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:14px;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);transition:all .15s}
+.back-btn:hover{border-color:#1D9E75;color:#1D9E75}
+.back-btn.visible{display:flex}
+.back-arrow{font-size:18px}
+
+/* STATS ONGLETS */
+.tab-stats{font-size:9px;color:rgba(255,255,255,.7);display:block;font-weight:400;margin-top:1px}
+
 </style>
 </head>
 <body>
@@ -236,10 +246,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('aliment')">🥕 Par aliment</button>
-    <button class="tab" onclick="switchTab('valeur')">📊 Par valeur</button>
-    <button class="tab" onclick="switchTab('nutriment')">💊 Par nutriment</button>
-    <button class="tab" onclick="switchTab('glossaire')">📖 Glossaire</button>
+    <button class="tab active" onclick="switchTab('aliment')" id="tab-btn-aliment">🥕 Par aliment</button>
+    <button class="tab" onclick="switchTab('valeur')" id="tab-btn-valeur">📊 Par valeur</button>
+    <button class="tab" onclick="switchTab('nutriment')" id="tab-btn-nutriment">💊 Par nutriment</button>
+    <button class="tab" onclick="switchTab('glossaire')" id="tab-btn-glossaire">📖 Glossaire</button>
   </div>
 </div>
 
@@ -251,6 +261,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div id="tab-aliment">
+    <button class="back-btn" id="back-aliment" onclick="hideDetail('aliment')"><span class="back-arrow">←</span> Retour aux résultats</button>
     <div class="search-box"><span class="s-icon">🔍</span><input type="search" id="sa" placeholder="Carotte, saumon, kiwi, amande..." oninput="filterA()"></div>
     <div class="filters" id="fa"></div>
     <div class="grid" id="ga"></div>
@@ -258,6 +269,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div id="tab-nutriment" style="display:none">
+    <button class="back-btn" id="back-nutriment" onclick="hideDetail('nutriment')"><span class="back-arrow">←</span> Retour aux nutriments</button>
     <div class="search-box"><span class="s-icon">🔍</span><input type="search" id="sn" placeholder="Vitamine C, magnésium, zinc, oméga-3..." oninput="filterN()"></div>
     <div class="filters" id="fn"></div>
     <div class="grid" id="gn"></div>
@@ -265,11 +277,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div id="tab-valeur" style="display:none">
+    <button class="back-btn" id="back-valeur" onclick="hideDetail('valeur')"><span class="back-arrow">←</span> Retour au classement</button>
     <div class="filters" id="fv"></div>
     <div id="dv"></div>
   </div>
 
   <div id="tab-glossaire" style="display:none">
+    <button class="back-btn" id="back-glossaire" onclick="hideDetail('glossaire')"><span class="back-arrow">←</span> Retour au glossaire</button>
     <div class="filters" id="fg"></div>
     <div id="dg"></div>
   </div>
@@ -305,29 +319,8 @@ const dietClass={vegan:'dt-vegan',vegetarien:'dt-veg','sansgluten':'dt-sg','sans
 const allerLabel={poisson:'🐟 Poisson',crustaces:'🦐 Crustacés',mollusques:'🦪 Mollusques',oeufs:'🥚 Œufs',lait:'🥛 Lait',gluten:'🌾 Gluten',soja:'🫘 Soja',arachides:'🥜 Arachides',fruits_coque:'🌰 Fruits à coque',celeri:'Céleri'};
 
 // ── ALIMENTS ──
-const catALabels={
-  tous:'Tous',
-  alcool:'🍺 Alcools',
-  beurre:'🥜 Beurres & Purées',
-  boisson:'☕ Boissons',
-  cereale:'🌾 Céréales & Noix',
-  charcuterie:'🥩 Charcuterie',
-  condiment:'🫙 Condiments & Sauces',
-  dessert:'🍰 Desserts & Sucreries',
-  epice:'🌿 Épices & Herbes',
-  fromage:'🧀 Fromages',
-  fruit:'🍎 Fruits',
-  gras:'🫒 Matières grasses',
-  laitier:'🥛 Laitiers & Œufs',
-  legume:'🥦 Légumes',
-  legumineuse:'🫘 Légumineuses cuisinées',
-  pate:'🍝 Pâtes & Nouilles',
-  petitdej:'🥣 Petit-déjeuner',
-  platcuisine:'🍽️ Plats cuisinés',
-  riz:'🍚 Riz & Céréales cuites',
-  sucrant:'🍯 Sucrants',
-  viande:'🥩 Viandes & Poissons',
-};
+const catALabels={tous:'Tous',legume:'🥦 Légumes',fruit:'🍎 Fruits',viande:'🥩 Viandes & Poissons',fromage:'🧀 Fromages',laitier:'🥛 Laitiers & Œufs',cereale:'🌾 Céréales & Noix',pate:'🍝 Pâtes & Nouilles',riz:'🍚 Riz & Céréales cuites',petitdej:'🥣 Petit-déjeuner',legumineuse:'🫘 Légumineuses cuisinées',alcool:'🍺 Alcools',dessert:'🍰 Desserts & Sucreries',sucrant:'🍯 Sucrants',beurre:'🥜 Beurres & Purées',condiment:'🫙 Condiments & Sauces',platcuisine:'🍽️ Plats cuisinés',gras:'🫒 Matières grasses',epice:'🌿 Épices & Herbes',boisson:'☕ Boissons',charcuterie:'🥩 Charcuterie'};
+
 function initA(){
   document.getElementById('fa').innerHTML=Object.entries(catALabels).map(([k,v])=>`<button class="fb${k==='tous'?' active':''}" onclick="setCatA('${k}',this)">${v}</button>`).join('');
   renderA();
@@ -437,6 +430,7 @@ function showA(id){
     </div>
   </div>`;
   document.getElementById('da').scrollIntoView({behavior:'smooth',block:'nearest'});
+  showBackBtn('aliment');
 }
 
 function togglePor(p100,id){
@@ -553,6 +547,7 @@ function showN(id){
     </div>
   </div>`;
   document.getElementById('dn').scrollIntoView({behavior:'smooth',block:'nearest'});
+  showBackBtn('nutriment');
 }
 
 
@@ -630,9 +625,9 @@ let glosCat = 'vitamine';
 let glosOpen = null;
 
 const glosCatLabels = {
+  vitamine: '💊 Vitamines',
   mineral:  '⚙️ Minéraux',
-  oligo:    '🔬 Oligo-éléments & Acides gras',
-  vitamine: '💊 Vitamines'
+  oligo:    '🔬 Oligo-éléments & Acides gras'
 };
 
 function initG(){
@@ -719,7 +714,59 @@ function renderG(){
   document.getElementById('dg').innerHTML = html;
 }
 
+
+// ── STATISTIQUES AUTOMATIQUES ──
+function updateTabStats(){
+  // Calculer automatiquement depuis les données
+  const nbAliments = ALIMENTS.length;
+  const nbCats = new Set(ALIMENTS.map(a=>a.cat)).size;
+  const nbNutriments = NUTRIMENTS.length;
+  const nbVit = GLOSSAIRE ? GLOSSAIRE.vitamines.length : 0;
+  const nbMin = GLOSSAIRE ? GLOSSAIRE.mineraux.length : 0;
+  const nbOli = GLOSSAIRE ? GLOSSAIRE.oligos.length : 0;
+  const nbFiches = nbVit + nbMin + nbOli;
+  const nbValeurs = typeof valeursConfig !== 'undefined' ? valeursConfig.length : 7;
+
+  const btnA = document.getElementById('tab-btn-aliment');
+  const btnV = document.getElementById('tab-btn-valeur');
+  const btnN = document.getElementById('tab-btn-nutriment');
+  const btnG = document.getElementById('tab-btn-glossaire');
+
+  if(btnA) btnA.innerHTML = `🥕 Par aliment<span class="tab-stats">${nbAliments} aliments • ${nbCats} catégories</span>`;
+  if(btnV) btnV.innerHTML = `📊 Par valeur<span class="tab-stats">${nbValeurs} classements</span>`;
+  if(btnN) btnN.innerHTML = `💊 Par nutriment<span class="tab-stats">${nbNutriments} nutriments</span>`;
+  if(btnG) btnG.innerHTML = `📖 Glossaire<span class="tab-stats">${nbFiches} fiches</span>`;
+}
+
+// ── FLÈCHE RETOUR ──
+function showBackBtn(tab){
+  const btn = document.getElementById('back-'+tab);
+  if(btn) btn.classList.add('visible');
+  // Scroll vers le haut de la fiche
+}
+
+function hideDetail(tab){
+  const btn = document.getElementById('back-'+tab);
+  if(btn) btn.classList.remove('visible');
+
+  if(tab==='aliment'){
+    document.getElementById('da').innerHTML='';
+    selA=null; renderA();
+  } else if(tab==='nutriment'){
+    document.getElementById('dn').innerHTML='';
+    selN=null; renderN();
+  } else if(tab==='valeur'){
+    // Retour au classement - scroll vers le haut
+    document.getElementById('dv').scrollIntoView({behavior:'smooth',block:'start'});
+  } else if(tab==='glossaire'){
+    glosOpen=null; renderG();
+  }
+  // Scroll vers le haut
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
 initA();initN();
+updateTabStats();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 </script>
 </body>
