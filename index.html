@@ -232,6 +232,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* STATS ONGLETS */
 .tab-stats{font-size:9px;color:rgba(255,255,255,.7);display:block;font-weight:400;margin-top:1px}
 
+
+/* BOUTON RETOUR FLOTTANT */
+.fab-back{position:fixed;bottom:24px;right:24px;width:52px;height:52px;background:#1D9E75;color:#fff;border:none;border-radius:50%;font-size:22px;font-weight:900;cursor:pointer;box-shadow:0 4px 16px rgba(29,158,117,.5);display:none;align-items:center;justify-content:center;z-index:999;transition:all .2s}
+.fab-back:hover{background:#0F6E56;transform:scale(1.1);box-shadow:0 6px 20px rgba(29,158,117,.6)}
+.fab-back.visible{display:flex}
+.fab-back-label{position:fixed;bottom:82px;right:16px;background:#1D9E75;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:10px;display:none;z-index:998;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.fab-back.visible ~ .fab-back-label{display:block}
+
 </style>
 </head>
 <body>
@@ -299,7 +307,15 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPro
 function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('install-banner').classList.add('hidden');});}}
 
 function switchTab(t){
+  // Mémoriser l'onglet précédent
+  if(tab && tab !== t){
+    const noms={aliment:'Par aliment',valeur:'Par valeur',nutriment:'Par nutriment',glossaire:'Glossaire'};
+    pushHistory('tab',{tab:tab, nom:noms[tab]||tab});
+  }
   tab=t;
+  // Réinitialiser l'historique de détail si on change d'onglet
+  fabHistory = fabHistory.filter(h => h.type === 'tab');
+  updateFab();
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',
     (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')||(i===3&&t==='glossaire')));
   document.getElementById('tab-aliment').style.display=t==='aliment'?'':'none';
@@ -431,6 +447,7 @@ function showA(id){
   </div>`;
   document.getElementById('da').scrollIntoView({behavior:'smooth',block:'nearest'});
   showBackBtn('aliment');
+  pushHistory('detail-aliment',{});
 }
 
 function togglePor(p100,id){
@@ -548,6 +565,7 @@ function showN(id){
   </div>`;
   document.getElementById('dn').scrollIntoView({behavior:'smooth',block:'nearest'});
   showBackBtn('nutriment');
+  pushHistory('detail-nutriment',{});
 }
 
 
@@ -738,6 +756,53 @@ function updateTabStats(){
   if(btnG) btnG.innerHTML = `📖 Glossaire<span class="tab-stats">${nbFiches} fiches</span>`;
 }
 
+
+// ── BOUTON RETOUR FLOTTANT ──
+let fabHistory = []; // historique de navigation
+
+function fabGoBack(){
+  if(fabHistory.length === 0) return;
+  const last = fabHistory.pop();
+  if(last.type === 'detail-aliment'){
+    hideDetail('aliment');
+  } else if(last.type === 'detail-nutriment'){
+    hideDetail('nutriment');
+  } else if(last.type === 'detail-glossaire'){
+    hideDetail('glossaire');
+  } else if(last.type === 'tab'){
+    switchTab(last.tab);
+  }
+  updateFab();
+}
+
+function pushHistory(type, data){
+  fabHistory.push({type, ...data});
+  updateFab();
+}
+
+function updateFab(){
+  const fab = document.getElementById('fab-back');
+  const lbl = document.getElementById('fab-label');
+  if(!fab) return;
+  if(fabHistory.length > 0){
+    const last = fabHistory[fabHistory.length-1];
+    fab.classList.add('visible');
+    if(last.type === 'detail-aliment'){
+      lbl.textContent = '← Liste aliments';
+    } else if(last.type === 'detail-nutriment'){
+      lbl.textContent = '← Liste nutriments';
+    } else if(last.type === 'detail-glossaire'){
+      lbl.textContent = '← Glossaire';
+    } else if(last.type === 'tab'){
+      lbl.textContent = '← ' + last.nom;
+    }
+    lbl.style.display = 'block';
+  } else {
+    fab.classList.remove('visible');
+    lbl.style.display = 'none';
+  }
+}
+
 // ── FLÈCHE RETOUR ──
 function showBackBtn(tab){
   const btn = document.getElementById('back-'+tab);
@@ -769,5 +834,10 @@ initA();initN();
 updateTabStats();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 </script>
+
+<!-- Bouton retour flottant -->
+<button class="fab-back" id="fab-back" onclick="fabGoBack()" title="Retour">←</button>
+<div class="fab-back-label" id="fab-label">Retour</div>
+
 </body>
 </html>
