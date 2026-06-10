@@ -240,13 +240,76 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .fab-back-label{position:fixed;bottom:82px;right:16px;background:#1D9E75;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:10px;display:none;z-index:998;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .fab-back.visible ~ .fab-back-label{display:block}
 
+
+/* SAISONS */
+.saison-header{text-align:center;padding:20px 0 16px;margin-bottom:8px}
+.saison-mois{font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px}
+.saison-desc{font-size:13px;color:var(--text2);line-height:1.6;max-width:500px;margin:0 auto}
+.saison-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:20px}
+.saison-nav-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;color:var(--text);transition:all .2s}
+.saison-nav-btn:hover{border-color:#1D9E75;color:#1D9E75}
+.saison-mois-actuel{font-size:16px;font-weight:700;color:#1D9E75;min-width:120px;text-align:center}
+.saison-section{margin-bottom:20px}
+.saison-section-title{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.saison-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.saison-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.saison-pill{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:10px 8px;text-align:center;cursor:pointer;transition:all .15s}
+.saison-pill:hover{border-color:#1D9E75;background:var(--green-l)}
+.saison-pill .sp-em{font-size:24px;display:block;margin-bottom:4px}
+.saison-pill .sp-nm{font-size:12px;font-weight:500;color:var(--text)}
+.saison-pill .sp-tip{font-size:10px;color:var(--text2);margin-top:2px}
+.saison-badge{display:inline-block;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-bottom:6px}
+.sb-pic{background:#FEF0E6;color:#C05000}
+.sb-ete{background:#FAEEDA;color:#854F0B}
+.sb-aut{background:#EEEDFE;color:#3C3489}
+.sb-hiv{background:#E6F1FB;color:#185FA5}
+.saison-conseil{background:var(--green-l);border-radius:var(--r);padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--text);line-height:1.7}
+.saison-conseil-titre{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+
+
+/* BOUTON AJOUTER */
+.fab-add{position:fixed;bottom:24px;left:24px;width:52px;height:52px;background:#185FA5;color:#fff;border:none;border-radius:50%;font-size:28px;font-weight:300;cursor:pointer;box-shadow:0 4px 16px rgba(24,95,165,.5);display:flex;align-items:center;justify-content:center;z-index:999;transition:all .2s}
+.fab-add:hover{background:#0F4A8A;transform:scale(1.1)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;backdrop-filter:blur(3px)}
+.modal-overlay.open{display:block}
+.modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(600px,95vw);max-height:88vh;background:var(--surface);border-radius:var(--r);z-index:1001;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);flex-direction:column}
+.modal.open{display:flex}
+.modal-header{background:#1D9E75;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-title{font-size:17px;font-weight:700;color:#fff}
+.modal-close{background:rgba(255,255,255,.2);border:none;color:#fff;font-size:22px;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{background:rgba(255,255,255,.4)}
+.modal-body{padding:20px;overflow-y:auto;flex:1}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;background:var(--surface)}
+
+/* FORMULAIRE */
+.form-section-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.form-section-title:first-child{margin-top:0}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.form-group{flex:1;min-width:120px;margin-bottom:10px}
+.form-group-sm{flex:0 0 90px}
+.form-label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:5px}
+.form-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--bg);color:var(--text);font-size:14px;outline:none;transition:border-color .2s;font-family:inherit}
+.form-input:focus{border-color:#1D9E75;background:var(--surface)}
+.form-textarea{min-height:80px;resize:vertical}
+.form-checks{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.form-check{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;padding:6px 10px;border:1.5px solid var(--border);border-radius:20px;transition:all .15s}
+.form-check:hover{border-color:#1D9E75}
+.form-check input{accent-color:#1D9E75;width:15px;height:15px}
+.modal-btn-cancel{padding:10px 20px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--text2);font-size:14px;font-weight:600;cursor:pointer}
+.modal-btn-save{padding:10px 24px;border:none;border-radius:var(--r-sm);background:#1D9E75;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.modal-btn-save:hover{background:#0F6E56}
+.msg-ok{background:var(--green-l);color:var(--teal)}
+.msg-err{background:var(--red-l);color:var(--red)}
+
 </style>
 </head>
 <body>
 
 <div class="header">
   <div class="header-top">
-    <div class="app-icon">🌿</div>
+    <div class="app-icon"><img src="icons/icon-192.png" style="width:32px;height:32px;border-radius:6px;" alt="NutriGuide"></div>
     <div>
       <div class="app-title">NutriGuide</div>
       <div class="app-sub">Calories • Macros • Vitamines • Minéraux • Oligo-éléments</div>
@@ -255,8 +318,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   <div class="tabs">
     <button class="tab active" onclick="switchTab('aliment')" id="tab-btn-aliment">🥕 Par aliment</button>
-    <button class="tab" onclick="switchTab('valeur')" id="tab-btn-valeur">📊 Par valeur</button>
     <button class="tab" onclick="switchTab('nutriment')" id="tab-btn-nutriment">💊 Par nutriment</button>
+    <button class="tab" onclick="switchTab('valeur')" id="tab-btn-valeur">📊 Par valeur</button>
+    <button class="tab" onclick="switchTab('saison')" id="tab-btn-saison">🌱 Saisons</button>
     <button class="tab" onclick="switchTab('glossaire')" id="tab-btn-glossaire">📖 Glossaire</button>
   </div>
 </div>
@@ -295,6 +359,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="filters" id="fg"></div>
     <div id="dg"></div>
   </div>
+
+  <div id="tab-saison" style="display:none">
+    <div id="ds"></div>
+  </div>
 </div>
 
 <script src="glossaire/glossaire.js"></script>
@@ -307,23 +375,23 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPro
 function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('install-banner').classList.add('hidden');});}}
 
 function switchTab(t){
-  // Mémoriser l'onglet précédent
   if(tab && tab !== t){
-    const noms={aliment:'Par aliment',valeur:'Par valeur',nutriment:'Par nutriment',glossaire:'Glossaire'};
+    const noms={aliment:'Par aliment',valeur:'Par valeur',nutriment:'Par nutriment',glossaire:'Glossaire',saison:'Saisons'};
     pushHistory('tab',{tab:tab, nom:noms[tab]||tab});
   }
   tab=t;
-  // Réinitialiser l'historique de détail si on change d'onglet
   fabHistory = fabHistory.filter(h => h.type === 'tab');
   updateFab();
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',
-    (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')||(i===3&&t==='glossaire')));
+    (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')||(i===3&&t==='glossaire')||(i===4&&t==='saison')));
   document.getElementById('tab-aliment').style.display=t==='aliment'?'':'none';
   document.getElementById('tab-valeur').style.display=t==='valeur'?'':'none';
   document.getElementById('tab-nutriment').style.display=t==='nutriment'?'':'none';
   document.getElementById('tab-glossaire').style.display=t==='glossaire'?'':'none';
+  document.getElementById('tab-saison').style.display=t==='saison'?'':'none';
   if(t==='valeur') initV();
   if(t==='glossaire') initG();
+  if(t==='saison') initS();
 }
 
 const igLabel=ig=>{if(!ig||ig===0)return{txt:'Protéine / Graisse',cls:'ig-zero'};if(ig<=40)return{txt:`IG bas (${ig})`,cls:'ig-low'};if(ig<=70)return{txt:`IG moyen (${ig})`,cls:'ig-med'};return{txt:`IG élevé (${ig})`,cls:'ig-high'};};
@@ -335,7 +403,7 @@ const dietClass={vegan:'dt-vegan',vegetarien:'dt-veg','sansgluten':'dt-sg','sans
 const allerLabel={poisson:'🐟 Poisson',crustaces:'🦐 Crustacés',mollusques:'🦪 Mollusques',oeufs:'🥚 Œufs',lait:'🥛 Lait',gluten:'🌾 Gluten',soja:'🫘 Soja',arachides:'🥜 Arachides',fruits_coque:'🌰 Fruits à coque',celeri:'Céleri'};
 
 // ── ALIMENTS ──
-const catALabels={tous:'Tous',legume:'🥦 Légumes',fruit:'🍎 Fruits',viande:'🥩 Viandes & Poissons',fromage:'🧀 Fromages',laitier:'🥛 Laitiers & Œufs',cereale:'🌾 Céréales & Noix',pate:'🍝 Pâtes & Nouilles',riz:'🍚 Riz & Céréales cuites',petitdej:'🥣 Petit-déjeuner',legumineuse:'🫘 Légumineuses cuisinées',alcool:'🍺 Alcools',dessert:'🍰 Desserts & Sucreries',sucrant:'🍯 Sucrants',beurre:'🥜 Beurres & Purées',condiment:'🫙 Condiments & Sauces',platcuisine:'🍽️ Plats cuisinés',gras:'🫒 Matières grasses',epice:'🌿 Épices & Herbes',boisson:'☕ Boissons',charcuterie:'🥩 Charcuterie'};
+const catALabels={tous:'Tous',abat:'🫀 Abats & Organes',alcool:'🍺 Alcools',beurre:'🥜 Beurres & Purées',boisson:'☕ Boissons',cereale:'🌾 Céréales & Noix',champignon:'🍄 Champignons',charcuterie:'🥩 Charcuterie',complement:'💊 Compléments',condiment:'🫙 Condiments & Sauces',conserve:'🥫 Conserves',cuisinemode:'🌍 Cuisine du monde',dessert:'🍰 Desserts & Sucreries',epice:'🌿 Épices & Herbes',fromage:'🧀 Fromages',fruit:'🍎 Fruits',gras:'🫒 Matières grasses',infusion:'🫖 Infusions & Tisanes',laitier:'🥛 Laitiers & Œufs',legume:'🥦 Légumes',legumineuse:'🫘 Légumineuses',pate:'🍝 Pâtes & Nouilles',petitdej:'🥣 Petit-déjeuner',platcuisine:'🍽️ Plats cuisinés',riz:'🍚 Riz & Céréales',ruche:'🐝 Produits de la ruche',smoothie:'🥤 Smoothies & Jus',sucrant:'🍯 Sucrants',superaliment:'🌿 Super-aliments',viande:'🥩 Viandes & Poissons'};
 
 function initA(){
   document.getElementById('fa').innerHTML=Object.entries(catALabels).map(([k,v])=>`<button class="fb${k==='tous'?' active':''}" onclick="setCatA('${k}',this)">${v}</button>`).join('');
@@ -754,6 +822,8 @@ function updateTabStats(){
   if(btnV) btnV.innerHTML = `📊 Par valeur<span class="tab-stats">${nbValeurs} classements</span>`;
   if(btnN) btnN.innerHTML = `💊 Par nutriment<span class="tab-stats">${nbNutriments} nutriments</span>`;
   if(btnG) btnG.innerHTML = `📖 Glossaire<span class="tab-stats">${nbFiches} fiches</span>`;
+  const btnS = document.getElementById('tab-btn-saison');
+  if(btnS) btnS.innerHTML = `🌱 Saisons<span class="tab-stats">12 mois • Fruits & Légumes</span>`;
 }
 
 
@@ -830,6 +900,243 @@ function hideDetail(tab){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+
+// ── SAISONS ──
+const SAISONS = {
+  1:  { nom:'Janvier', emoji:'❄️', saison:'Hiver', badge:'sb-hiv',
+        conseil:'En janvier, privilégiez les agrumes riches en vitamine C pour booster votre immunité contre le froid. Les légumes racines apportent énergie et minéraux.',
+        legumes:['Poireau','Carotte','Navet','Rutabaga','Panais','Topinambour','Chou blanc','Endive','Bette','Épinards','Courge butternut','Céleri','Betterave','Chou-fleur','Brocoli'],
+        fruits:['Orange','Mandarine','Citron','Pamplemousse','Kiwi','Pomme','Poire','Coing'] },
+  2:  { nom:'Février', emoji:'🌨️', saison:'Hiver', badge:'sb-hiv',
+        conseil:'Février est le mois le plus creux côté fruits et légumes. Misez sur les légumineuses et les choux pour faire le plein de nutriments.',
+        legumes:['Poireau','Carotte','Navet','Endive','Chou blanc','Chou-fleur','Brocoli','Épinards','Mâche','Betterave','Céleri','Topinambour'],
+        fruits:['Orange','Citron','Pamplemousse','Kiwi','Pomme','Poire'] },
+  3:  { nom:'Mars', emoji:'🌱', saison:'Printemps', badge:'sb-pic',
+        conseil:'Mars marque le retour du printemps. Les premières radis et asperges font leur apparition. C\'est le moment des cures détox après l\'hiver.',
+        legumes:['Asperge','Radis','Épinards','Poireau','Carotte','Chou-fleur','Brocoli','Artichaut','Mâche','Betterave','Céleri'],
+        fruits:['Orange','Citron','Kiwi','Pomme','Poire','Banane'] },
+  4:  { nom:'Avril', emoji:'🌸', saison:'Printemps', badge:'sb-pic',
+        conseil:'Avril est le mois de la détox printanière. Asperges, épinards et petits pois nettoient l\'organisme après l\'hiver. Profitez-en !',
+        legumes:['Asperge','Radis','Épinards','Petits pois','Artichaut','Laitue','Brocoli','Carotte','Oignon nouveau','Ail nouveau'],
+        fruits:['Fraise','Orange','Citron','Kiwi','Rhubarbe','Pomme','Banane'] },
+  5:  { nom:'Mai', emoji:'🌺', saison:'Printemps', badge:'sb-pic',
+        conseil:'Mai est le mois de la fraise et des légumes printaniers. Riche en vitamines et antioxydants — c\'est l\'un des meilleurs mois pour manger frais !',
+        legumes:['Asperge','Radis','Épinards','Petits pois','Artichaut','Laitue','Fève','Courgette','Oignon','Ail','Brocoli'],
+        fruits:['Fraise','Cerise','Rhubarbe','Kiwi','Banane','Abricot'] },
+  6:  { nom:'Juin', emoji:'☀️', saison:'Été', badge:'sb-ete',
+        conseil:'Juin marque le début de l\'été et des fruits rouges. Fraises, cerises et abricots font le plein d\'antioxydants. Hydratez-vous bien !',
+        legumes:['Tomate','Courgette','Concombre','Poivron','Haricot vert','Petits pois','Laitue','Radis','Ail','Oignon','Épinards'],
+        fruits:['Fraise','Cerise','Abricot','Melon','Pêche','Nectarine','Framboise','Cassis','Groseille'] },
+  7:  { nom:'Juillet', emoji:'🌞', saison:'Été', badge:'sb-ete',
+        conseil:'Juillet est le mois des fruits à noyau et des tomates. Les antioxydants sont à leur maximum. Pensez à bien vous hydrater avec les concombres et pastèques.',
+        legumes:['Tomate','Courgette','Concombre','Poivron','Haricot vert','Aubergine','Maïs','Fenouil','Laitue','Ail','Oignon'],
+        fruits:['Pêche','Nectarine','Abricot','Melon','Pastèque','Framboise','Myrtille','Cerise','Figue','Prune'] },
+  8:  { nom:'Août', emoji:'🏖️', saison:'Été', badge:'sb-ete',
+        conseil:'Août est le mois le plus riche en fruits. Profitez des figues, myrtilles et pêches. Les tomates sont à leur meilleur pour le lycopène.',
+        legumes:['Tomate','Courgette','Poivron','Aubergine','Concombre','Maïs','Haricot vert','Fenouil','Betterave','Oignon'],
+        fruits:['Figue','Pêche','Nectarine','Prune','Myrtille','Mûre','Melon','Pastèque','Raisin','Abricot'] },
+  9:  { nom:'Septembre', emoji:'🍂', saison:'Automne', badge:'sb-aut',
+        conseil:'Septembre marque le retour des raisins et pommes. C\'est aussi le début des champignons. Faites le plein d\'antioxydants avant l\'hiver.',
+        legumes:['Potiron','Courge','Poivron','Tomate','Champignon','Betterave','Chou','Poireau','Haricot vert','Épinards'],
+        fruits:['Raisin','Pomme','Poire','Figue','Prune','Quetsche','Kiwi','Mûre','Noisette'] },
+  10: { nom:'Octobre', emoji:'🎃', saison:'Automne', badge:'sb-aut',
+        conseil:'Octobre est le mois des courges et champignons. Le potiron est une excellente source de bêta-carotène. Les noix font leur retour !',
+        legumes:['Potiron','Courge butternut','Champignon','Chou','Poireau','Betterave','Épinards','Carotte','Panais','Céleri','Navet'],
+        fruits:['Pomme','Poire','Raisin','Kiwi','Coing','Noisette','Noix','Châtaigne','Figue'] },
+  11: { nom:'Novembre', emoji:'🍁', saison:'Automne', badge:'sb-aut',
+        conseil:'Novembre marque le retour des légumes d\'hiver. Choux, poireaux et carottes sont vos alliés pour renforcer l\'immunité avant les grands froids.',
+        legumes:['Chou','Poireau','Carotte','Betterave','Panais','Rutabaga','Topinambour','Céleri','Navet','Épinards','Endive'],
+        fruits:['Pomme','Poire','Kiwi','Orange','Mandarine','Coing','Noix','Châtaigne'] },
+  12: { nom:'Décembre', emoji:'🎄', saison:'Hiver', badge:'sb-hiv',
+        conseil:'Décembre est le mois des agrumes et des huîtres. Profitez des clémentines et oranges pour la vitamine C. Les marrons sont nutritifs et réconfortants.',
+        legumes:['Poireau','Carotte','Chou','Betterave','Endive','Navet','Panais','Céleri','Épinards','Topinambour'],
+        fruits:['Orange','Mandarine','Clémentine','Citron','Pamplemousse','Kiwi','Pomme','Poire','Châtaigne'] }
+};
+
+let moisActuel = new Date().getMonth() + 1;
+let saisonInited = false;
+
+function initS(){
+  if(!saisonInited){
+    saisonInited = true;
+  }
+  renderS();
+  updateTabStats();
+}
+
+function changerMois(delta){
+  moisActuel += delta;
+  if(moisActuel > 12) moisActuel = 1;
+  if(moisActuel < 1) moisActuel = 12;
+  renderS();
+}
+
+function renderS(){
+  const s = SAISONS[moisActuel];
+  const moisNoms = ['','Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const maintenant = new Date().getMonth() + 1;
+  const estMoisActuel = moisActuel === maintenant;
+
+  // Trouver les aliments correspondants dans ALIMENTS
+  function trouverAliment(nom){
+    return ALIMENTS.find(a =>
+      a.nom.toLowerCase().includes(nom.toLowerCase()) ||
+      nom.toLowerCase().includes(a.nom.toLowerCase().split(' ')[0])
+    );
+  }
+
+  function pillsHTML(liste, couleur){
+    return liste.map(nom => {
+      const alim = trouverAliment(nom);
+      const emoji = alim ? alim.emoji : '🌿';
+      const onclick = alim ? `onclick="switchTab('aliment');setCatA('tous',document.querySelector('#fa .fb'));document.getElementById('sa').value='${alim.nom}';filterA();setTimeout(()=>showA('${alim.id}'),200)"` : '';
+      return `<div class="saison-pill" ${onclick}>
+        <span class="sp-em">${emoji}</span>
+        <span class="sp-nm">${nom}</span>
+        ${alim ? '<span class="sp-tip">Voir fiche →</span>' : ''}
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('ds').innerHTML = `
+    <div class="saison-header">
+      <div class="saison-nav">
+        <button class="saison-nav-btn" onclick="changerMois(-1)">◀ Mois préc.</button>
+        <div class="saison-mois-actuel">${s.emoji} ${s.nom}</div>
+        <button class="saison-nav-btn" onclick="changerMois(1)">Mois suiv. ▶</button>
+      </div>
+      <div>
+        <span class="saison-badge ${s.badge}">${s.saison}</span>
+        ${estMoisActuel ? '<span class="saison-badge" style="background:var(--green-l);color:var(--teal)">📅 Mois actuel</span>' : ''}
+      </div>
+    </div>
+
+    <div class="saison-conseil">
+      <div class="saison-conseil-titre">💡 Conseil du mois</div>
+      ${s.conseil}
+    </div>
+
+    <div class="saison-section">
+      <div class="saison-section-title">🥦 Légumes de saison</div>
+      <div class="saison-grid">${pillsHTML(s.legumes, 'green')}</div>
+    </div>
+
+    <div class="saison-section">
+      <div class="saison-section-title">🍎 Fruits de saison</div>
+      <div class="saison-grid">${pillsHTML(s.fruits, 'amber')}</div>
+    </div>
+  `;
+}
+
+
+// ── FORMULAIRE AJOUT ALIMENT ──
+function ouvrirFormulaire(){
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-form').classList.add('open');
+  document.getElementById('form-msg').style.display='none';
+  // Vider le formulaire
+  ['f-nom','f-emoji','f-portion-label','f-portion-g','f-kcal','f-prot',
+   'f-gluc','f-lip','f-fibres','f-sucres','f-ig','f-bienfaits','f-astuce'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  document.getElementById('f-cat').value='';
+  ['f-vegan','f-veg','f-sg','f-sl'].forEach(id=>{
+    document.getElementById(id).checked=false;
+  });
+}
+
+function fermerFormulaire(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.getElementById('modal-form').classList.remove('open');
+}
+
+function showFormMsg(msg, ok){
+  const el = document.getElementById('form-msg');
+  el.textContent = msg;
+  el.className = ok ? 'msg-ok' : 'msg-err';
+  el.style.display = 'block';
+}
+
+function sauvegarderAliment(){
+  // Validation
+  const nom = document.getElementById('f-nom').value.trim();
+  const emoji = document.getElementById('f-emoji').value.trim();
+  const cat = document.getElementById('f-cat').value;
+  const kcal = parseFloat(document.getElementById('f-kcal').value)||0;
+
+  if(!nom){ showFormMsg('⚠️ Le nom est obligatoire !', false); return; }
+  if(!emoji){ showFormMsg('⚠️ L\'emoji est obligatoire !', false); return; }
+  if(!cat){ showFormMsg('⚠️ La catégorie est obligatoire !', false); return; }
+  if(!kcal){ showFormMsg('⚠️ Les calories sont obligatoires !', false); return; }
+
+  // Créer l'ID depuis le nom
+  const id = nom.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');
+
+  // Vérifier doublon
+  if(ALIMENTS.find(a => a.id === id)){
+    showFormMsg('⚠️ Un aliment avec ce nom existe déjà !', false);
+    return;
+  }
+
+  // Tags régimes
+  const tags = [];
+  if(document.getElementById('f-vegan').checked) tags.push('vegan');
+  if(document.getElementById('f-veg').checked) tags.push('vegetarien');
+  if(document.getElementById('f-sg').checked) tags.push('sansgluten');
+  if(document.getElementById('f-sl').checked) tags.push('sanslactose');
+
+  // Bienfaits
+  const bienfaitsStr = document.getElementById('f-bienfaits').value.trim();
+  const bienfaits = bienfaitsStr ? bienfaitsStr.split(',').map(b=>b.trim()).filter(b=>b) : ['À compléter'];
+
+  // Créer l'aliment
+  const nouvelAliment = {
+    id: id,
+    nom: nom,
+    emoji: emoji,
+    cat: cat,
+    tags: tags,
+    allergenes: [],
+    portion: {
+      label: document.getElementById('f-portion-label').value.trim() || '1 portion',
+      g: parseInt(document.getElementById('f-portion-g').value)||100
+    },
+    val: {
+      kcal: parseFloat(document.getElementById('f-kcal').value)||0,
+      prot: parseFloat(document.getElementById('f-prot').value)||0,
+      gluc: parseFloat(document.getElementById('f-gluc').value)||0,
+      lip: parseFloat(document.getElementById('f-lip').value)||0,
+      fibres: parseFloat(document.getElementById('f-fibres').value)||0,
+      sucres: parseFloat(document.getElementById('f-sucres').value)||0,
+      ig: parseInt(document.getElementById('f-ig').value)||0
+    },
+    nutri: [],
+    bienfaits: bienfaits,
+    astuce: document.getElementById('f-astuce').value.trim() || 'Ajouté manuellement.'
+  };
+
+  // Ajouter à ALIMENTS
+  ALIMENTS.push(nouvelAliment);
+
+  // Mettre à jour l'affichage
+  updateTabStats();
+
+  // Message succès
+  showFormMsg('✅ ' + nom + ' ajouté avec succès ! (' + ALIMENTS.length + ' aliments au total)', true);
+
+  // Aller vers l'aliment après 1.5s
+  setTimeout(()=>{
+    fermerFormulaire();
+    switchTab('aliment');
+    setCatA('tous', document.querySelector('#fa .fb'));
+    document.getElementById('sa').value = nom;
+    filterA();
+    setTimeout(()=>showA(id), 200);
+  }, 1500);
+}
+
 initA();initN();
 updateTabStats();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
@@ -838,6 +1145,139 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 <!-- Bouton retour flottant -->
 <button class="fab-back" id="fab-back" onclick="fabGoBack()" title="Retour">←</button>
 <div class="fab-back-label" id="fab-label">Retour</div>
+
+<!-- Bouton ajouter un aliment -->
+<button class="fab-add" id="fab-add" onclick="ouvrirFormulaire()" title="Ajouter un aliment">+</button>
+
+<!-- Modal formulaire -->
+<div class="modal-overlay" id="modal-overlay" onclick="fermerFormulaire()"></div>
+<div class="modal" id="modal-form">
+  <div class="modal-header">
+    <div class="modal-title">🥕 Ajouter un aliment</div>
+    <button class="modal-close" onclick="fermerFormulaire()">×</button>
+  </div>
+  <div class="modal-body">
+    <div class="form-section-title">Informations générales</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nom de l'aliment *</label>
+        <input type="text" id="f-nom" class="form-input" placeholder="ex: Avocat">
+      </div>
+      <div class="form-group form-group-sm">
+        <label class="form-label">Emoji *</label>
+        <input type="text" id="f-emoji" class="form-input" placeholder="🥑" maxlength="2">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Catégorie *</label>
+        <select id="f-cat" class="form-input">
+          <option value="">-- Choisir --</option>
+          <option value="abat">🫀 Abats & Organes</option>
+          <option value="alcool">🍺 Alcools</option>
+          <option value="beurre">🥜 Beurres & Purées</option>
+          <option value="boisson">☕ Boissons</option>
+          <option value="cereale">🌾 Céréales & Noix</option>
+          <option value="champignon">🍄 Champignons</option>
+          <option value="charcuterie">🥩 Charcuterie</option>
+          <option value="complement">💊 Compléments</option>
+          <option value="condiment">🫙 Condiments</option>
+          <option value="conserve">🥫 Conserves</option>
+          <option value="cuisinemode">🌍 Cuisine du monde</option>
+          <option value="dessert">🍰 Desserts</option>
+          <option value="epice">🌿 Épices & Herbes</option>
+          <option value="fromage">🧀 Fromages</option>
+          <option value="fruit">🍎 Fruits</option>
+          <option value="gras">🫒 Matières grasses</option>
+          <option value="infusion">🫖 Infusions</option>
+          <option value="laitier">🥛 Laitiers & Œufs</option>
+          <option value="legume">🥦 Légumes</option>
+          <option value="legumineuse">🫘 Légumineuses</option>
+          <option value="pate">🍝 Pâtes & Nouilles</option>
+          <option value="petitdej">🥣 Petit-déjeuner</option>
+          <option value="platcuisine">🍽️ Plats cuisinés</option>
+          <option value="riz">🍚 Riz & Céréales cuites</option>
+          <option value="ruche">🐝 Produits de la ruche</option>
+          <option value="smoothie">🥤 Smoothies</option>
+          <option value="sucrant">🍯 Sucrants</option>
+          <option value="superaliment">🌿 Super-aliments</option>
+          <option value="viande">🥩 Viandes & Poissons</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Portion typique</label>
+        <input type="text" id="f-portion-label" class="form-input" placeholder="ex: 1 avocat">
+      </div>
+      <div class="form-group form-group-sm">
+        <label class="form-label">Poids (g)</label>
+        <input type="number" id="f-portion-g" class="form-input" placeholder="150">
+      </div>
+    </div>
+
+    <div class="form-section-title">Valeurs nutritives (pour 100g)</div>
+    <div class="form-row">
+      <div class="form-group form-group-sm">
+        <label class="form-label">🔥 Calories (kcal)</label>
+        <input type="number" id="f-kcal" class="form-input" placeholder="160">
+      </div>
+      <div class="form-group form-group-sm">
+        <label class="form-label">💪 Protéines (g)</label>
+        <input type="number" step="0.1" id="f-prot" class="form-input" placeholder="2.0">
+      </div>
+      <div class="form-group form-group-sm">
+        <label class="form-label">🍞 Glucides (g)</label>
+        <input type="number" step="0.1" id="f-gluc" class="form-input" placeholder="9.0">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group form-group-sm">
+        <label class="form-label">🫒 Lipides (g)</label>
+        <input type="number" step="0.1" id="f-lip" class="form-input" placeholder="15.0">
+      </div>
+      <div class="form-group form-group-sm">
+        <label class="form-label">🌾 Fibres (g)</label>
+        <input type="number" step="0.1" id="f-fibres" class="form-input" placeholder="6.7">
+      </div>
+      <div class="form-group form-group-sm">
+        <label class="form-label">🍬 Sucres (g)</label>
+        <input type="number" step="0.1" id="f-sucres" class="form-input" placeholder="0.7">
+      </div>
+      <div class="form-group form-group-sm">
+        <label class="form-label">📊 Index glycémique</label>
+        <input type="number" id="f-ig" class="form-input" placeholder="15">
+      </div>
+    </div>
+
+    <div class="form-section-title">Régimes & Allergènes</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Régimes compatibles</label>
+        <div class="form-checks">
+          <label class="form-check"><input type="checkbox" id="f-vegan" value="vegan"> 🌱 Vegan</label>
+          <label class="form-check"><input type="checkbox" id="f-veg" value="vegetarien"> 🥗 Végétarien</label>
+          <label class="form-check"><input type="checkbox" id="f-sg" value="sansgluten"> 🌾 Sans gluten</label>
+          <label class="form-check"><input type="checkbox" id="f-sl" value="sanslactose"> 🥛 Sans lactose</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section-title">Bienfaits & Conseil</div>
+    <div class="form-group">
+      <label class="form-label">Bienfaits principaux (séparés par des virgules)</label>
+      <input type="text" id="f-bienfaits" class="form-input" placeholder="Cœur, Antioxydant, Peau, Énergie">
+    </div>
+    <div class="form-group">
+      <label class="form-label">💡 Astuce / Conseil nutrition</label>
+      <textarea id="f-astuce" class="form-input form-textarea" placeholder="Votre conseil nutritionnel sur cet aliment..."></textarea>
+    </div>
+
+    <div id="form-msg" style="display:none;padding:10px 14px;border-radius:var(--r-sm);margin-top:8px;font-size:13px;font-weight:600"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-btn-cancel" onclick="fermerFormulaire()">Annuler</button>
+    <button class="modal-btn-save" onclick="sauvegarderAliment()">✅ Ajouter l'aliment</button>
+  </div>
+</div>
 
 </body>
 </html>
