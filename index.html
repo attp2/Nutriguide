@@ -303,6 +303,59 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .msg-ok{background:var(--green-l);color:var(--teal)}
 .msg-err{background:var(--red-l);color:var(--red)}
 
+
+/* QUIZ */
+.quiz-home{text-align:center;padding:30px 20px}
+.quiz-home-title{font-size:26px;font-weight:800;color:var(--text);margin-bottom:8px}
+.quiz-home-sub{font-size:14px;color:var(--text2);margin-bottom:30px;line-height:1.6}
+.quiz-modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.quiz-mode-btn{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:20px 14px;cursor:pointer;text-align:center;transition:all .2s}
+.quiz-mode-btn:hover{border-color:#1D9E75;transform:translateY(-2px);box-shadow:0 4px 12px rgba(29,158,117,.2)}
+.quiz-mode-btn.active{border-color:#1D9E75;background:var(--green-l)}
+.quiz-mode-em{font-size:32px;display:block;margin-bottom:8px}
+.quiz-mode-nm{font-size:14px;font-weight:700;color:var(--text)}
+.quiz-mode-desc{font-size:11px;color:var(--text2);margin-top:4px}
+.quiz-start-btn{background:#1D9E75;color:#fff;border:none;border-radius:var(--r);padding:14px 40px;font-size:17px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(29,158,117,.3)}
+.quiz-start-btn:hover{background:#0F6E56;transform:translateY(-1px)}
+
+.quiz-game{padding:4px 0}
+.quiz-progress-bar{height:6px;background:var(--bg);border-radius:3px;margin-bottom:20px;overflow:hidden}
+.quiz-progress-fill{height:6px;background:#1D9E75;border-radius:3px;transition:width .4s ease}
+.quiz-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.quiz-num{font-size:13px;color:var(--text2);font-weight:600}
+.quiz-score-live{background:var(--green-l);color:var(--teal);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700}
+.quiz-question{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.quiz-q-badge{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.quiz-q-text{font-size:17px;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:6px}
+.quiz-q-sub{font-size:13px;color:var(--text2)}
+.quiz-answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.quiz-ans-btn{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-sm);padding:14px 12px;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:all .2s;display:flex;align-items:center;gap:8px;color:var(--text)}
+.quiz-ans-btn:hover:not(:disabled){border-color:#1D9E75;background:var(--green-l)}
+.quiz-ans-btn.correct{border-color:#1D9E75;background:var(--green-l);color:var(--teal)}
+.quiz-ans-btn.wrong{border-color:var(--red);background:var(--red-l);color:var(--red)}
+.quiz-ans-btn.reveal{border-color:#1D9E75;background:var(--green-l);color:var(--teal);opacity:.7}
+.quiz-ans-btn:disabled{cursor:default}
+.quiz-explication{background:var(--blue-l);border-radius:var(--r-sm);padding:14px;margin-bottom:16px;font-size:13px;color:var(--text);line-height:1.6;display:none}
+.quiz-explication.show{display:block}
+.quiz-explication-titre{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;margin-bottom:6px}
+.quiz-next-btn{width:100%;background:#1D9E75;color:#fff;border:none;border-radius:var(--r);padding:14px;font-size:15px;font-weight:700;cursor:pointer;display:none;transition:all .2s}
+.quiz-next-btn.show{display:block}
+.quiz-next-btn:hover{background:#0F6E56}
+
+.quiz-results{text-align:center;padding:20px 0}
+.quiz-score-big{font-size:72px;font-weight:900;color:#1D9E75;line-height:1}
+.quiz-score-label{font-size:16px;color:var(--text2);margin-bottom:20px}
+.quiz-medal{font-size:60px;margin-bottom:10px}
+.quiz-msg{font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px}
+.quiz-msg-sub{font-size:14px;color:var(--text2);margin-bottom:24px}
+.quiz-details{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.quiz-detail-box{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:14px;text-align:center}
+.quiz-detail-val{font-size:24px;font-weight:800;color:#1D9E75}
+.quiz-detail-lbl{font-size:11px;color:var(--text2);margin-top:4px}
+.quiz-restart-btn{background:#1D9E75;color:#fff;border:none;border-radius:var(--r);padding:12px 30px;font-size:15px;font-weight:700;cursor:pointer;margin:0 6px}
+.quiz-restart-btn:hover{background:#0F6E56}
+.quiz-restart-btn.sec{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
+
 </style>
 </head>
 <body>
@@ -318,10 +371,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   <div class="tabs">
     <button class="tab active" onclick="switchTab('aliment')" id="tab-btn-aliment">🥕 Par aliment</button>
-    <button class="tab" onclick="switchTab('nutriment')" id="tab-btn-nutriment">💊 Par nutriment</button>
     <button class="tab" onclick="switchTab('valeur')" id="tab-btn-valeur">📊 Par valeur</button>
-    <button class="tab" onclick="switchTab('saison')" id="tab-btn-saison">🌱 Saisons</button>
+    <button class="tab" onclick="switchTab('nutriment')" id="tab-btn-nutriment">💊 Par nutriment</button>
     <button class="tab" onclick="switchTab('glossaire')" id="tab-btn-glossaire">📖 Glossaire</button>
+    <button class="tab" onclick="switchTab('saison')" id="tab-btn-saison">🌱 Saisons</button>
+    <button class="tab" onclick="switchTab('quiz')" id="tab-btn-quiz">🧠 Quiz</button>
   </div>
 </div>
 
@@ -363,6 +417,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div id="tab-saison" style="display:none">
     <div id="ds"></div>
   </div>
+
+  <div id="tab-quiz" style="display:none">
+    <div id="dq"></div>
+  </div>
 </div>
 
 <script src="glossaire/glossaire.js"></script>
@@ -383,15 +441,17 @@ function switchTab(t){
   fabHistory = fabHistory.filter(h => h.type === 'tab');
   updateFab();
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',
-    (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')||(i===3&&t==='glossaire')||(i===4&&t==='saison')));
+    (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')||(i===3&&t==='glossaire')||(i===4&&t==='saison')||(i===5&&t==='quiz')));
   document.getElementById('tab-aliment').style.display=t==='aliment'?'':'none';
   document.getElementById('tab-valeur').style.display=t==='valeur'?'':'none';
   document.getElementById('tab-nutriment').style.display=t==='nutriment'?'':'none';
   document.getElementById('tab-glossaire').style.display=t==='glossaire'?'':'none';
   document.getElementById('tab-saison').style.display=t==='saison'?'':'none';
+  document.getElementById('tab-quiz').style.display=t==='quiz'?'':'none';
   if(t==='valeur') initV();
   if(t==='glossaire') initG();
   if(t==='saison') initS();
+  if(t==='quiz') initQ();
 }
 
 const igLabel=ig=>{if(!ig||ig===0)return{txt:'Protéine / Graisse',cls:'ig-zero'};if(ig<=40)return{txt:`IG bas (${ig})`,cls:'ig-low'};if(ig<=70)return{txt:`IG moyen (${ig})`,cls:'ig-med'};return{txt:`IG élevé (${ig})`,cls:'ig-high'};};
@@ -824,6 +884,8 @@ function updateTabStats(){
   if(btnG) btnG.innerHTML = `📖 Glossaire<span class="tab-stats">${nbFiches} fiches</span>`;
   const btnS = document.getElementById('tab-btn-saison');
   if(btnS) btnS.innerHTML = `🌱 Saisons<span class="tab-stats">12 mois • Fruits & Légumes</span>`;
+  const btnQ = document.getElementById('tab-btn-quiz');
+  if(btnQ) btnQ.innerHTML = `🧠 Quiz<span class="tab-stats">6 modes • 10 questions</span>`;
 }
 
 
@@ -1135,6 +1197,248 @@ function sauvegarderAliment(){
     filterA();
     setTimeout(()=>showA(id), 200);
   }, 1500);
+}
+
+
+// ── QUIZ NUTRITION ──
+let quizMode = 'calories';
+let quizQuestions = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizReponses = [];
+let quizInited = false;
+
+const quizModes = [
+  {id:'calories',  em:'🔥', nm:'Calories',    desc:'Quel aliment est le plus calorique ?'},
+  {id:'proteines', em:'💪', nm:'Protéines',    desc:'Quel aliment est le plus riche en protéines ?'},
+  {id:'vitamines', em:'💊', nm:'Vitamines',    desc:'Quelle vitamine est dans cet aliment ?'},
+  {id:'categories',em:'🏷️', nm:'Catégories',   desc:'Dans quelle catégorie est cet aliment ?'},
+  {id:'valeurs',   em:'📊', nm:'Valeurs',      desc:'Devinez la valeur nutritive !'},
+  {id:'mix',       em:'🎲', nm:'Mix surprise', desc:'Toutes les questions mélangées !'},
+];
+
+function initQ(){
+  if(!quizInited){ quizInited = true; }
+  renderQHome();
+  updateTabStats();
+}
+
+function renderQHome(){
+  const modesHTML = quizModes.map(m => `
+    <div class="quiz-mode-btn${quizMode===m.id?' active':''}" onclick="setQuizMode('${m.id}',this)">
+      <span class="quiz-mode-em">${m.em}</span>
+      <div class="quiz-mode-nm">${m.nm}</div>
+      <div class="quiz-mode-desc">${m.desc}</div>
+    </div>`).join('');
+
+  document.getElementById('dq').innerHTML = `
+    <div class="quiz-home">
+      <div class="quiz-home-title">🧠 Quiz Nutrition</div>
+      <div class="quiz-home-sub">Testez vos connaissances sur les aliments et leurs valeurs nutritives !<br>10 questions par partie — générées depuis notre base de ${ALIMENTS.length} aliments.</div>
+      <div class="quiz-modes">${modesHTML}</div>
+      <button class="quiz-start-btn" onclick="demarrerQuiz()">▶ Commencer le quiz</button>
+    </div>`;
+}
+
+function setQuizMode(mode, btn){
+  quizMode = mode;
+  document.querySelectorAll('.quiz-mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function melanger(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function genererQuestions(mode, nb=10){
+  const questions = [];
+  const alims = ALIMENTS.filter(a => a.val && a.val.kcal > 0);
+
+  function getRandom(arr, n){ return melanger(arr).slice(0,n); }
+  function getChoix4(correct, tous, key){
+    const autres = melanger(tous.filter(a=>a.id!==correct.id)).slice(0,3);
+    return melanger([correct,...autres]);
+  }
+
+  const types = mode==='mix'
+    ? ['calories','proteines','vitamines','categories','valeurs']
+    : [mode];
+
+  let tentatives = 0;
+  while(questions.length < nb && tentatives < 200){
+    tentatives++;
+    const type = types[Math.floor(Math.random()*types.length)];
+    const alim = alims[Math.floor(Math.random()*alims.length)];
+
+    if(type==='calories'){
+      const choix = getChoix4(alim, alims);
+      const correct = choix.reduce((a,b)=>a.val.kcal>b.val.kcal?a:b);
+      questions.push({
+        type, badge:'🔥 Calories',
+        question:`Lequel de ces aliments est le plus calorique ?`,
+        sous:`(valeurs pour 100g)`,
+        choix: choix.map(c=>({id:c.id, txt:`${c.emoji} ${c.nom}`, val:`${c.val.kcal} kcal`, correct:c.id===correct.id})),
+        explication:`${correct.emoji} ${correct.nom} est le plus calorique avec ${correct.val.kcal} kcal/100g. ${correct.astuce}`
+      });
+    }
+    else if(type==='proteines'){
+      const choix = getChoix4(alim, alims);
+      const correct = choix.reduce((a,b)=>a.val.prot>b.val.prot?a:b);
+      questions.push({
+        type, badge:'💪 Protéines',
+        question:`Lequel est le plus riche en protéines ?`,
+        sous:`(valeurs pour 100g)`,
+        choix: choix.map(c=>({id:c.id, txt:`${c.emoji} ${c.nom}`, val:`${c.val.prot}g prot.`, correct:c.id===correct.id})),
+        explication:`${correct.emoji} ${correct.nom} contient ${correct.val.prot}g de protéines/100g. ${correct.astuce}`
+      });
+    }
+    else if(type==='vitamines' && alim.nutri && alim.nutri.length > 0){
+      const bonneVit = alim.nutri[Math.floor(Math.random()*alim.nutri.length)];
+      const toutesVit = [...new Set(ALIMENTS.flatMap(a=>a.nutri?a.nutri.map(n=>n.n):[])) ];
+      const fausses = melanger(toutesVit.filter(v=>v!==bonneVit.n)).slice(0,3);
+      const choix = melanger([bonneVit.n,...fausses]);
+      questions.push({
+        type, badge:'💊 Vitamines & Minéraux',
+        question:`${alim.emoji} ${alim.nom} est particulièrement riche en...`,
+        sous:`Choisissez le nutriment que cet aliment contient en quantité élevée`,
+        choix: choix.map(c=>({id:c, txt:c, correct:c===bonneVit.n})),
+        explication:`${alim.emoji} ${alim.nom} est riche en ${bonneVit.n} (${bonneVit.role}). ${alim.astuce}`
+      });
+    }
+    else if(type==='categories'){
+      const bonnecat = alim.cat;
+      const touscats = [...new Set(ALIMENTS.map(a=>a.cat))];
+      const faussescats = melanger(touscats.filter(c=>c!==bonnecat)).slice(0,3);
+      const choix = melanger([bonnecat,...faussescats]);
+      const catLabels = {abat:'Abats',alcool:'Alcools',beurre:'Beurres & Purées',boisson:'Boissons',cereale:'Céréales & Noix',champignon:'Champignons',charcuterie:'Charcuterie',complement:'Compléments',condiment:'Condiments',conserve:'Conserves',cuisinemode:'Cuisine du monde',dessert:'Desserts',epice:'Épices & Herbes',fromage:'Fromages',fruit:'Fruits',gras:'Matières grasses',infusion:'Infusions',laitier:'Laitiers & Oeufs',legume:'Légumes',legumineuse:'Légumineuses',pate:'Pâtes & Nouilles',petitdej:'Petit-déjeuner',platcuisine:'Plats cuisinés',riz:'Riz & Céréales',ruche:'Produits de la ruche',smoothie:'Smoothies',sucrant:'Sucrants',superaliment:'Super-aliments',viande:'Viandes & Poissons'};
+      questions.push({
+        type, badge:'🏷️ Catégories',
+        question:`Dans quelle catégorie se trouve ${alim.emoji} ${alim.nom} ?`,
+        sous:``,
+        choix: choix.map(c=>({id:c, txt:catLabels[c]||c, correct:c===bonnecat})),
+        explication:`${alim.emoji} ${alim.nom} appartient à la catégorie "${catLabels[bonnecat]||bonnecat}". ${alim.astuce}`
+      });
+    }
+    else if(type==='valeurs'){
+      const props = [{k:'kcal',lbl:'calories',unite:'kcal'},{k:'prot',lbl:'protéines',unite:'g'},{k:'fibres',lbl:'fibres',unite:'g'},{k:'lip',lbl:'lipides',unite:'g'}];
+      const prop = props[Math.floor(Math.random()*props.length)];
+      const vraie = alim.val[prop.k];
+      if(!vraie || vraie===0) continue;
+      const variations = [0.4, 0.65, 1.4, 1.8];
+      const fausses = melanger(variations).slice(0,3).map(v=>Math.round(vraie*v*10)/10);
+      const choix = melanger([vraie,...fausses]);
+      questions.push({
+        type, badge:'📊 Valeurs nutritives',
+        question:`Combien de ${prop.lbl} contient ${alim.emoji} ${alim.nom} pour 100g ?`,
+        sous:``,
+        choix: choix.map(c=>({id:String(c), txt:`${c} ${prop.unite}`, correct:c===vraie})),
+        explication:`${alim.emoji} ${alim.nom} contient ${vraie}${prop.unite} de ${prop.lbl} pour 100g. ${alim.astuce}`
+      });
+    }
+  }
+  return questions.slice(0,nb);
+}
+
+function demarrerQuiz(){
+  quizQuestions = genererQuestions(quizMode, 10);
+  quizIndex = 0;
+  quizScore = 0;
+  quizReponses = [];
+  afficherQuestion();
+}
+
+function afficherQuestion(){
+  if(quizIndex >= quizQuestions.length){ afficherResultats(); return; }
+  const q = quizQuestions[quizIndex];
+  const pct = (quizIndex/quizQuestions.length)*100;
+
+  const choixHTML = q.choix.map((c,i)=>`
+    <button class="quiz-ans-btn" id="qa-${i}" onclick="repondre(${i})">
+      <span>${String.fromCharCode(65+i)}</span> ${c.txt}
+    </button>`).join('');
+
+  document.getElementById('dq').innerHTML = `
+    <div class="quiz-game">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+      <div class="quiz-info">
+        <span class="quiz-num">Question ${quizIndex+1} / ${quizQuestions.length}</span>
+        <span class="quiz-score-live">⭐ ${quizScore} pts</span>
+      </div>
+      <div class="quiz-question">
+        <div class="quiz-q-badge">${q.badge}</div>
+        <div class="quiz-q-text">${q.question}</div>
+        ${q.sous?`<div class="quiz-q-sub">${q.sous}</div>`:''}
+      </div>
+      <div class="quiz-answers">${choixHTML}</div>
+      <div class="quiz-explication" id="quiz-expl">
+        <div class="quiz-explication-titre">💡 Explication</div>
+        ${q.explication}
+      </div>
+      <button class="quiz-next-btn" id="quiz-next" onclick="questionSuivante()">
+        ${quizIndex+1<quizQuestions.length ? 'Question suivante →' : 'Voir mes résultats 🏆'}
+      </button>
+    </div>`;
+}
+
+function repondre(idx){
+  const q = quizQuestions[quizIndex];
+  const correct = q.choix[idx].correct;
+  if(correct) quizScore++;
+  quizReponses.push({correct});
+
+  // Colorer les boutons
+  q.choix.forEach((c,i)=>{
+    const btn = document.getElementById('qa-'+i);
+    if(btn){
+      btn.disabled = true;
+      if(c.correct) btn.classList.add('correct');
+      else if(i===idx && !c.correct) btn.classList.add('wrong');
+      else btn.classList.add('reveal');
+    }
+  });
+
+  document.getElementById('quiz-expl').classList.add('show');
+  document.getElementById('quiz-next').classList.add('show');
+}
+
+function questionSuivante(){
+  quizIndex++;
+  afficherQuestion();
+}
+
+function afficherResultats(){
+  const total = quizQuestions.length;
+  const pct = Math.round((quizScore/total)*100);
+  const bonnes = quizScore;
+  const mauvaises = total - bonnes;
+
+  let medal, msg, sub;
+  if(pct===100){medal='🏆';msg='Parfait ! Expert en nutrition !';sub='Score parfait ! Vous connaissez NutriGuide sur le bout des doigts !';}
+  else if(pct>=80){medal='🥇';msg='Excellent ! Très bien !';sub='Vous avez de très bonnes connaissances en nutrition !';}
+  else if(pct>=60){medal='🥈';msg='Bien joué !';sub='Bon niveau ! Continuez à explorer NutriGuide pour progresser.';}
+  else if(pct>=40){medal='🥉';msg='Pas mal !';sub='Vous avez des bases solides. Consultez les fiches aliments pour progresser.';}
+  else{medal='📚';msg='À réviser !';sub='Explorez les fiches aliments et le glossaire pour mieux connaître la nutrition.';}
+
+  document.getElementById('dq').innerHTML = `
+    <div class="quiz-results">
+      <div class="quiz-medal">${medal}</div>
+      <div class="quiz-score-big">${pct}%</div>
+      <div class="quiz-score-label">${bonnes} bonne${bonnes>1?'s':''} réponse${bonnes>1?'s':''} sur ${total}</div>
+      <div class="quiz-msg">${msg}</div>
+      <div class="quiz-msg-sub">${sub}</div>
+      <div class="quiz-details">
+        <div class="quiz-detail-box"><div class="quiz-detail-val" style="color:#1D9E75">${bonnes}</div><div class="quiz-detail-lbl">Bonnes réponses</div></div>
+        <div class="quiz-detail-box"><div class="quiz-detail-val" style="color:var(--red)">${mauvaises}</div><div class="quiz-detail-lbl">Mauvaises réponses</div></div>
+        <div class="quiz-detail-box"><div class="quiz-detail-val">${total}</div><div class="quiz-detail-lbl">Questions</div></div>
+      </div>
+      <button class="quiz-restart-btn" onclick="demarrerQuiz()">🔄 Rejouer</button>
+      <button class="quiz-restart-btn sec" onclick="renderQHome()">🏠 Accueil quiz</button>
+    </div>`;
 }
 
 initA();initN();
