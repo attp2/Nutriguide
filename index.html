@@ -441,7 +441,7 @@ function switchTab(t){
   fabHistory = fabHistory.filter(h => h.type === 'tab');
   updateFab();
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',
-    (i===0&&t==='aliment')||(i===1&&t==='valeur')||(i===2&&t==='nutriment')||(i===3&&t==='glossaire')||(i===4&&t==='saison')||(i===5&&t==='quiz')));
+    (i===0&&t==='aliment')||(i===1&&t==='nutriment')||(i===2&&t==='valeur')||(i===3&&t==='saison')||(i===4&&t==='glossaire')||(i===5&&t==='quiz')));
   document.getElementById('tab-aliment').style.display=t==='aliment'?'':'none';
   document.getElementById('tab-valeur').style.display=t==='valeur'?'':'none';
   document.getElementById('tab-nutriment').style.display=t==='nutriment'?'':'none';

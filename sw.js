@@ -1,4 +1,4 @@
-const CACHE = 'nutriguide-v21';
+const CACHE = 'nutriguide-v22';
 const FILES = ['/', '/index.html', '/data.js', '/manifest.json', '/icons/icon-192.png', '/icons/icon-512.png', '/glossaire/glossaire.js'];
 
 self.addEventListener('install', e => {
