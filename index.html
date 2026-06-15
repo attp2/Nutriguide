@@ -301,6 +301,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .modal-btn-save{padding:10px 24px;border:none;border-radius:var(--r-sm);background:#1D9E75;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
 .modal-btn-save:hover{background:#0F6E56}
 .msg-ok{background:var(--green-l);color:var(--teal)}
+.nutri-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
 .msg-err{background:var(--red-l);color:var(--red)}
 
 
@@ -1119,17 +1120,38 @@ function showFormMsg(msg, ok){
   el.style.display = 'block';
 }
 
+
+function ajouterNutriRow(){
+  const container = document.getElementById('nutri-fields');
+  const rows = container.querySelectorAll('.nutri-row');
+  if(rows.length >= 6){ return; } // max 6 nutriments
+  const div = document.createElement('div');
+  div.className = 'nutri-row';
+  div.innerHTML = `
+    <input type="text" class="form-input nutri-nom" placeholder="ex: Magnésium" style="flex:2">
+    <input type="text" class="form-input nutri-role" placeholder="ex: Muscles, énergie" style="flex:2">
+    <select class="form-input nutri-lvl" style="flex:1">
+      <option value="high">⬆ Élevé</option>
+      <option value="med" selected>➡ Moyen</option>
+      <option value="low">⬇ Traces</option>
+    </select>
+    <button onclick="this.parentElement.remove()" style="background:var(--red-l);color:var(--red);border:none;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:16px">×</button>
+  `;
+  container.appendChild(div);
+}
+
 function sauvegarderAliment(){
   // Validation
   const nom = document.getElementById('f-nom').value.trim();
   const emoji = document.getElementById('f-emoji').value.trim();
   const cat = document.getElementById('f-cat').value;
-  const kcal = parseFloat(document.getElementById('f-kcal').value)||0;
+  const kcalRaw = document.getElementById('f-kcal').value;
+  const kcal = kcalRaw === '' ? null : parseFloat(kcalRaw);
 
   if(!nom){ showFormMsg('⚠️ Le nom est obligatoire !', false); return; }
   if(!emoji){ showFormMsg('⚠️ L\'emoji est obligatoire !', false); return; }
   if(!cat){ showFormMsg('⚠️ La catégorie est obligatoire !', false); return; }
-  if(!kcal){ showFormMsg('⚠️ Les calories sont obligatoires !', false); return; }
+  if(kcal === '' || kcal === null || isNaN(kcal)){ showFormMsg('⚠️ Les calories sont obligatoires (0 si aucune calorie) !', false); return; }
 
   // Créer l'ID depuis le nom
   const id = nom.toLowerCase()
@@ -1166,7 +1188,7 @@ function sauvegarderAliment(){
       g: parseInt(document.getElementById('f-portion-g').value)||100
     },
     val: {
-      kcal: parseFloat(document.getElementById('f-kcal').value)||0,
+      kcal: parseFloat(document.getElementById('f-kcal').value) || 0,
       prot: parseFloat(document.getElementById('f-prot').value)||0,
       gluc: parseFloat(document.getElementById('f-gluc').value)||0,
       lip: parseFloat(document.getElementById('f-lip').value)||0,
@@ -1174,7 +1196,17 @@ function sauvegarderAliment(){
       sucres: parseFloat(document.getElementById('f-sucres').value)||0,
       ig: parseInt(document.getElementById('f-ig').value)||0
     },
-    nutri: [],
+    nutri: (()=>{
+      const rows = document.querySelectorAll('.nutri-row');
+      const result = [];
+      rows.forEach(row => {
+        const nom = row.querySelector('.nutri-nom').value.trim();
+        const role = row.querySelector('.nutri-role').value.trim();
+        const lvl = row.querySelector('.nutri-lvl').value;
+        if(nom && role) result.push({n:nom, role:role, lvl:lvl});
+      });
+      return result;
+    })(),
     bienfaits: bienfaits,
     astuce: document.getElementById('f-astuce').value.trim() || 'Ajouté manuellement.'
   };
@@ -1564,6 +1596,21 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
         </div>
       </div>
     </div>
+
+    <div class="form-section-title">Vitamines, Minéraux & Oligo-éléments</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Ajoutez jusqu'à 6 nutriments. Format: Nom | Rôle | Niveau (high/med/low)</div>
+    <div id="nutri-fields">
+      <div class="nutri-row">
+        <input type="text" class="form-input nutri-nom" placeholder="ex: Vitamine C" style="flex:2">
+        <input type="text" class="form-input nutri-role" placeholder="ex: Immunité" style="flex:2">
+        <select class="form-input nutri-lvl" style="flex:1">
+          <option value="high">⬆ Élevé</option>
+          <option value="med">➡ Moyen</option>
+          <option value="low">⬇ Traces</option>
+        </select>
+      </div>
+    </div>
+    <button type="button" onclick="ajouterNutriRow()" style="background:none;border:1.5px dashed var(--border);border-radius:var(--r-sm);padding:8px 16px;font-size:13px;color:var(--text2);cursor:pointer;width:100%;margin-top:8px;margin-bottom:4px">+ Ajouter un nutriment</button>
 
     <div class="form-section-title">Bienfaits & Conseil</div>
     <div class="form-group">
