@@ -1124,7 +1124,7 @@ function showFormMsg(msg, ok){
 function ajouterNutriRow(){
   const container = document.getElementById('nutri-fields');
   const rows = container.querySelectorAll('.nutri-row');
-  if(rows.length >= 6){ return; } // max 6 nutriments
+  if(rows.length >= 15){ return; } // max 15 nutriments
   const div = document.createElement('div');
   div.className = 'nutri-row';
   div.innerHTML = `
@@ -1598,7 +1598,7 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
     </div>
 
     <div class="form-section-title">Vitamines, Minéraux & Oligo-éléments</div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Ajoutez jusqu'à 6 nutriments. Format: Nom | Rôle | Niveau (high/med/low)</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Ajoutez jusqu'à 15 nutriments. Format: Nom | Rôle | Niveau (high/med/low)</div>
     <div id="nutri-fields">
       <div class="nutri-row">
         <input type="text" class="form-input nutri-nom" placeholder="ex: Vitamine C" style="flex:2">
