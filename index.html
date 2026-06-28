@@ -373,6 +373,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nutri-badge-low{background:var(--gray-l);color:var(--gray)}
 .nutri-badge-zero{background:var(--bg);color:var(--text2)}
 
+
+/* INDEX */
+.index-search{position:relative;margin-bottom:14px}
+.index-search input{width:100%;padding:11px 16px 11px 42px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);font-size:15px;outline:none;transition:border-color .2s}
+.index-search input:focus{border-color:#1D9E75}
+.index-search .s-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:17px}
+.index-alpha{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.alpha-btn{padding:5px 9px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--text2);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;min-width:34px;text-align:center}
+.alpha-btn:hover{border-color:#1D9E75;color:#1D9E75}
+.alpha-btn.active{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.alpha-btn.disabled{opacity:.3;cursor:default}
+.index-section{margin-bottom:18px}
+.index-section-letter{font-size:22px;font-weight:900;color:#1D9E75;padding:8px 0 6px;border-bottom:2px solid #1D9E75;margin-bottom:10px}
+.index-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:7px}
+.index-item{display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);cursor:pointer;transition:all .15s}
+.index-item:hover{border-color:#1D9E75;background:var(--green-l)}
+.index-item-em{font-size:20px;flex-shrink:0}
+.index-item-info{flex:1;min-width:0}
+.index-item-nom{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.index-item-cat{font-size:11px;color:var(--text2);margin-top:1px}
+.index-stats{font-size:13px;color:var(--text2);margin-bottom:12px;padding:10px 14px;background:var(--green-l);border-radius:var(--r-sm)}
+
+
+/* BOUTON MODIFIER */
+.btn-modifier{background:var(--blue-l);color:var(--blue);border:1.5px solid var(--blue);border-radius:var(--r-sm);padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:10px;width:100%}
+.btn-modifier:hover{background:var(--blue);color:#fff}
+
 </style>
 </head>
 <body>
@@ -392,6 +419,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="tab" onclick="switchTab('valeur')" id="tab-btn-valeur">📊 Par valeur</button>
     <button class="tab" onclick="switchTab('saison')" id="tab-btn-saison">🌱 Saisons</button>
     <button class="tab" onclick="switchTab('glossaire')" id="tab-btn-glossaire">📖 Glossaire</button>
+    <button class="tab" onclick="switchTab('index')" id="tab-btn-index">🔤 Index</button>
     <button class="tab" onclick="switchTab('quiz')" id="tab-btn-quiz">🧠 Quiz</button>
   </div>
 </div>
@@ -435,6 +463,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div id="ds"></div>
   </div>
 
+  <div id="tab-index" style="display:none">
+    <div id="di"></div>
+  </div>
+
   <div id="tab-quiz" style="display:none">
     <div id="dq"></div>
   </div>
@@ -458,16 +490,18 @@ function switchTab(t){
   fabHistory = fabHistory.filter(h => h.type === 'tab');
   updateFab();
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',
-    (i===0&&t==='aliment')||(i===1&&t==='nutriment')||(i===2&&t==='valeur')||(i===3&&t==='saison')||(i===4&&t==='glossaire')||(i===5&&t==='quiz')));
+    (i===0&&t==='aliment')||(i===1&&t==='nutriment')||(i===2&&t==='valeur')||(i===3&&t==='saison')||(i===4&&t==='glossaire')||(i===5&&t==='index')||(i===6&&t==='quiz')));
   document.getElementById('tab-aliment').style.display=t==='aliment'?'':'none';
   document.getElementById('tab-valeur').style.display=t==='valeur'?'':'none';
   document.getElementById('tab-nutriment').style.display=t==='nutriment'?'':'none';
   document.getElementById('tab-glossaire').style.display=t==='glossaire'?'':'none';
   document.getElementById('tab-saison').style.display=t==='saison'?'':'none';
+  document.getElementById('tab-index').style.display=t==='index'?'':'none';
   document.getElementById('tab-quiz').style.display=t==='quiz'?'':'none';
   if(t==='valeur') initV();
   if(t==='glossaire') initG();
   if(t==='saison') initS();
+  if(t==='index') initI();
   if(t==='quiz') initQ();
 }
 
@@ -588,6 +622,7 @@ function showA(id){
       </div>
 
       <div class="tip"><div class="tip-lbl">💡 Conseil nutrition</div><div class="tip-txt">${a.astuce}</div></div>
+      <button class="btn-modifier" onclick="ouvrirModification('${a.id}')">✏️ Modifier cette fiche</button>
     </div>
   </div>`;
   document.getElementById('da').scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -901,6 +936,8 @@ function updateTabStats(){
   if(btnG) btnG.innerHTML = `📖 Glossaire<span class="tab-stats">${nbFiches} fiches</span>`;
   const btnS = document.getElementById('tab-btn-saison');
   if(btnS) btnS.innerHTML = `🌱 Saisons<span class="tab-stats">12 mois • Fruits & Légumes</span>`;
+  const btnI = document.getElementById('tab-btn-index');
+  if(btnI) btnI.innerHTML = `🔤 Index<span class="tab-stats">${nbAliments} aliments A→Z</span>`;
   const btnQ = document.getElementById('tab-btn-quiz');
   if(btnQ) btnQ.innerHTML = `🧠 Quiz<span class="tab-stats">6 modes • 10 questions</span>`;
 }
@@ -1594,6 +1631,246 @@ function lireNutriForm(){
     }
   });
   return result;
+}
+
+
+// ── INDEX ALPHABÉTIQUE ──
+let indexLettre = 'tous';
+let indexSearch = '';
+
+function initI(){
+  renderIndex();
+  updateTabStats();
+}
+
+function indexItemHTML(a){
+  const catLabels = {abat:'Abats',alcool:'Alcools',beurre:'Beurres & Purées',
+    boisson:'Boissons',cereale:'Céréales & Noix',champignon:'Champignons',
+    charcuterie:'Charcuterie',complement:'Compléments',condiment:'Condiments',
+    conserve:'Conserves',cuisinemode:'Cuisine du monde',dessert:'Desserts',
+    epice:'Épices & Herbes',fromage:'Fromages',fruit:'Fruits',gras:'Matières grasses',
+    infusion:'Infusions',laitier:'Laitiers & Œufs',legume:'Légumes',
+    legumineuse:'Légumineuses',pate:'Pâtes & Nouilles',petitdej:'Petit-déjeuner',
+    platcuisine:'Plats cuisinés',riz:'Riz & Céréales',ruche:'Produits de la ruche',
+    smoothie:'Smoothies',sucrant:'Sucrants',superaliment:'Super-aliments',
+    viande:'Viandes & Poissons'};
+  return `<div class="index-item" onclick="allerVersAliment('${a.id}')">
+    <span class="index-item-em">${a.emoji}</span>
+    <div class="index-item-info">
+      <div class="index-item-nom">${a.nom}</div>
+      <div class="index-item-cat">${catLabels[a.cat]||a.cat}</div>
+    </div>
+    <span style="color:var(--text2);font-size:12px">→</span>
+  </div>`;
+}
+
+function renderIndex(){
+  const terme = indexSearch.toLowerCase().trim();
+  let items = [...ALIMENTS];
+  if(terme) items = items.filter(a => a.nom.toLowerCase().includes(terme));
+  if(indexLettre !== 'tous'){
+    items = items.filter(a => {
+      const premiere = a.nom.normalize('NFD').replace(/[̀-ͯ]/g,'')[0].toUpperCase();
+      return premiere === indexLettre;
+    });
+  }
+  items.sort((a,b) => a.nom.localeCompare(b.nom,'fr'));
+
+  const lettresDispos = new Set(
+    ALIMENTS.map(a => a.nom[0].toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,''))
+  );
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+  // Générer les boutons alphabet
+  let alphaHTML = '';
+  const btnTous = document.createElement('button');
+  btnTous.className = 'alpha-btn' + (indexLettre==='tous' ? ' active' : '');
+  btnTous.textContent = 'Tous';
+  btnTous.setAttribute('data-lettre', 'tous');
+  alphaHTML += btnTous.outerHTML;
+  alphabet.forEach(l => {
+    const dispo = lettresDispos.has(l);
+    const btn = document.createElement('button');
+    btn.className = 'alpha-btn' + (indexLettre===l ? ' active' : '') + (dispo ? '' : ' disabled');
+    btn.textContent = l;
+    btn.setAttribute('data-lettre', dispo ? l : '');
+    alphaHTML += btn.outerHTML;
+  });
+
+  let contenu = '';
+  if(indexLettre === 'tous' && !terme){
+    // Grouper par lettre
+    const groupes = {};
+    items.forEach(a => {
+      const l = a.nom.normalize('NFD').replace(/[̀-ͯ]/g,'')[0].toUpperCase();
+      if(!groupes[l]) groupes[l] = [];
+      groupes[l].push(a);
+    });
+    Object.keys(groupes).sort().forEach(l => {
+      contenu += `<div class="index-section" id="index-section-${l}">
+        <div class="index-section-letter">${l}</div>
+        <div class="index-list">${groupes[l].map(a => indexItemHTML(a)).join('')}</div>
+      </div>`;
+    });
+  } else {
+    // Afficher seulement les aliments de la lettre sélectionnée
+    const titre = indexLettre !== 'tous'
+      ? `<div class="index-section-letter">${indexLettre} — ${items.length} aliment${items.length>1?'s':''}</div>`
+      : '';
+    contenu = titre + `<div class="index-list">${items.map(a => indexItemHTML(a)).join('')}</div>`;
+  }
+
+  document.getElementById('di').innerHTML = `
+    <div class="index-stats">
+      📋 <strong>${ALIMENTS.length} aliments</strong> dans l'index —
+      ${items.length} résultat${items.length>1?'s':''}${terme?' pour "'+terme+'"':''}
+    </div>
+    <div class="index-search">
+      <span class="s-icon">🔍</span>
+      <input type="search" placeholder="Rechercher dans l'index..."
+        value="${indexSearch}"
+        oninput="indexSearch=this.value;renderIndex()">
+    </div>
+    <div class="index-alpha" id="alpha-container">${alphaHTML}</div>
+    ${contenu||'<div class="empty"><div class="empty-icon">🔎</div><p>Aucun aliment trouvé</p></div>'}
+  `;
+
+  // Attacher les événements aux boutons alphabet
+  document.querySelectorAll('#alpha-container .alpha-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const l = btn.getAttribute('data-lettre');
+      if(l) setIndexLettre(l);
+    });
+  });
+}
+
+function setIndexLettre(l){
+  indexLettre = l;
+  renderIndex();
+  // Remonter en haut de la liste
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function allerVersAliment(id){
+  // Aller vers la fiche aliment
+  switchTab('aliment');
+  setCatA('tous', document.querySelector('#fa .fb'));
+  document.getElementById('sa').value = '';
+  filterA();
+  setTimeout(() => showA(id), 150);
+}
+
+
+// ── MODIFIER UNE FICHE ──
+function ouvrirModification(id){
+  const a = ALIMENTS.find(x => x.id === id);
+  if(!a) return;
+
+  // Ouvrir le formulaire
+  ouvrirFormulaire();
+
+  // Remplir avec les données existantes
+  setTimeout(()=>{
+    document.getElementById('f-nom').value = a.nom;
+    document.getElementById('f-emoji').value = a.emoji;
+    document.getElementById('f-cat').value = a.cat;
+    document.getElementById('f-portion-label').value = a.portion.label;
+    document.getElementById('f-portion-g').value = a.portion.g;
+    document.getElementById('f-kcal').value = a.val.kcal;
+    document.getElementById('f-prot').value = a.val.prot;
+    document.getElementById('f-gluc').value = a.val.gluc;
+    document.getElementById('f-lip').value = a.val.lip;
+    document.getElementById('f-fibres').value = a.val.fibres;
+    document.getElementById('f-sucres').value = a.val.sucres;
+    document.getElementById('f-ig').value = a.val.ig;
+    document.getElementById('f-bienfaits').value = a.bienfaits.join(', ');
+    document.getElementById('f-astuce').value = a.astuce;
+
+    // Régimes
+    document.getElementById('f-vegan').checked = a.tags.includes('vegan');
+    document.getElementById('f-veg').checked = a.tags.includes('vegetarien');
+    document.getElementById('f-sg').checked = a.tags.includes('sansgluten');
+    document.getElementById('f-sl').checked = a.tags.includes('sanslactose');
+
+    // Remplir les nutriments existants
+    if(a.nutri && a.nutri.length > 0){
+      const defs = [
+        ...NUTRI_DEFINITIONS.vitamines,
+        ...NUTRI_DEFINITIONS.mineraux,
+        ...NUTRI_DEFINITIONS.oligos
+      ];
+      a.nutri.forEach(n => {
+        const def = defs.find(d => d.nom === n.n);
+        if(def){
+          const input = document.getElementById('nv-'+def.id);
+          if(input && n.valeur) input.value = n.valeur;
+          else if(input){
+            // Estimation si pas de valeur exacte
+            if(n.lvl==='high') input.value = Math.round(def.ajr * 0.5);
+            else if(n.lvl==='med') input.value = Math.round(def.ajr * 0.2);
+            else if(n.lvl==='low') input.value = Math.round(def.ajr * 0.05);
+          }
+          if(input) updateNutriBadge(def.id, def.ajr);
+        }
+      });
+    }
+
+    // Changer le titre et le bouton
+    document.querySelector('.modal-title').textContent = '✏️ Modifier — ' + a.nom;
+    document.querySelector('.modal-btn-save').textContent = '✅ Enregistrer les modifications';
+    document.querySelector('.modal-btn-save').onclick = () => sauvegarderModification(id);
+  }, 100);
+}
+
+function sauvegarderModification(id){
+  const idx = ALIMENTS.findIndex(a => a.id === id);
+  if(idx < 0) return;
+
+  const tags = [];
+  if(document.getElementById('f-vegan').checked) tags.push('vegan');
+  if(document.getElementById('f-veg').checked) tags.push('vegetarien');
+  if(document.getElementById('f-sg').checked) tags.push('sansgluten');
+  if(document.getElementById('f-sl').checked) tags.push('sanslactose');
+
+  const bienfaitsStr = document.getElementById('f-bienfaits').value.trim();
+
+  // Mettre à jour l'aliment
+  ALIMENTS[idx] = {
+    ...ALIMENTS[idx],
+    nom: document.getElementById('f-nom').value.trim(),
+    emoji: document.getElementById('f-emoji').value.trim(),
+    cat: document.getElementById('f-cat').value,
+    tags: tags,
+    portion: {
+      label: document.getElementById('f-portion-label').value.trim() || '1 portion',
+      g: parseInt(document.getElementById('f-portion-g').value) || 100
+    },
+    val: {
+      kcal: parseFloat(document.getElementById('f-kcal').value) || 0,
+      prot: parseFloat(document.getElementById('f-prot').value) || 0,
+      gluc: parseFloat(document.getElementById('f-gluc').value) || 0,
+      lip: parseFloat(document.getElementById('f-lip').value) || 0,
+      fibres: parseFloat(document.getElementById('f-fibres').value) || 0,
+      sucres: parseFloat(document.getElementById('f-sucres').value) || 0,
+      ig: parseInt(document.getElementById('f-ig').value) || 0
+    },
+    nutri: lireNutriForm(),
+    bienfaits: bienfaitsStr ? bienfaitsStr.split(',').map(b=>b.trim()).filter(b=>b) : [],
+    astuce: document.getElementById('f-astuce').value.trim()
+  };
+
+  updateTabStats();
+  showFormMsg('✅ ' + ALIMENTS[idx].nom + ' modifié avec succès !', true);
+
+  setTimeout(()=>{
+    fermerFormulaire();
+    // Réinitialiser le bouton sauvegarder
+    document.querySelector('.modal-btn-save').textContent = '✅ Ajouter l\'aliment';
+    document.querySelector('.modal-btn-save').onclick = sauvegarderAliment;
+    document.querySelector('.modal-title').textContent = '🥕 Ajouter un aliment';
+    // Afficher la fiche mise à jour
+    showA(id);
+  }, 1200);
 }
 
 initA();initN();
