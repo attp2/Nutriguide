@@ -439,6 +439,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
 }
 
+
+/* INDICATEUR DÉFILEMENT ONGLETS (mobile) */
+.tabs-wrapper{position:relative}
+.tabs-fade-right{display:none;position:absolute;right:0;top:0;bottom:0;width:36px;
+  background:linear-gradient(to right, transparent, #0F6E56 75%);
+  pointer-events:none;align-items:center;justify-content:flex-end;padding-right:4px;z-index:5}
+.tabs-fade-right.show{display:flex}
+.tabs-fade-arrow{color:#fff;font-size:16px;animation:pulse-arrow 1.5s ease-in-out infinite}
+@keyframes pulse-arrow{0%,100%{transform:translateX(0);opacity:.7}50%{transform:translateX(3px);opacity:1}}
+@media(min-width:601px){.tabs-fade-right{display:none !important}}
+
 </style>
 </head>
 <body>
@@ -452,14 +463,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="app-sub">Guide nutritionnel pour rechercher les aliments par produit, nutriment ou valeur et faire de meilleurs choix alimentaires.</div>
     </div>
   </div>
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('aliment')" id="tab-btn-aliment">🥕 Par aliment</button>
-    <button class="tab" onclick="switchTab('nutriment')" id="tab-btn-nutriment">💊 Par nutriment</button>
-    <button class="tab" onclick="switchTab('valeur')" id="tab-btn-valeur">📊 Par valeur</button>
-    <button class="tab" onclick="switchTab('saison')" id="tab-btn-saison">🌱 Saisons</button>
-    <button class="tab" onclick="switchTab('glossaire')" id="tab-btn-glossaire">📖 Glossaire</button>
-    <button class="tab" onclick="switchTab('index')" id="tab-btn-index">🔤 Index</button>
-    <button class="tab" onclick="switchTab('quiz')" id="tab-btn-quiz">🧠 Quiz</button>
+  <div class="tabs-wrapper">
+    <div class="tabs" id="tabs-scroll">
+      <button class="tab active" onclick="switchTab('aliment')" id="tab-btn-aliment">🥕 Par aliment</button>
+      <button class="tab" onclick="switchTab('nutriment')" id="tab-btn-nutriment">💊 Par nutriment</button>
+      <button class="tab" onclick="switchTab('valeur')" id="tab-btn-valeur">📊 Par valeur</button>
+      <button class="tab" onclick="switchTab('saison')" id="tab-btn-saison">🌱 Saisons</button>
+      <button class="tab" onclick="switchTab('glossaire')" id="tab-btn-glossaire">📖 Glossaire</button>
+      <button class="tab" onclick="switchTab('index')" id="tab-btn-index">🔤 Index</button>
+      <button class="tab" onclick="switchTab('quiz')" id="tab-btn-quiz">🧠 Quiz</button>
+    </div>
+    <div class="tabs-fade-right" id="tabs-fade"><span class="tabs-fade-arrow">▶</span></div>
   </div>
 </div>
 
@@ -542,6 +556,7 @@ function switchTab(t){
   if(t==='saison') initS();
   if(t==='index') initI();
   if(t==='quiz') initQ();
+  setTimeout(checkTabsScroll, 50);
 }
 
 const igLabel=ig=>{if(!ig||ig===0)return{txt:'Protéine / Graisse',cls:'ig-zero'};if(ig<=40)return{txt:`IG bas (${ig})`,cls:'ig-low'};if(ig<=70)return{txt:`IG moyen (${ig})`,cls:'ig-med'};return{txt:`IG élevé (${ig})`,cls:'ig-high'};};
@@ -1911,7 +1926,28 @@ function sauvegarderModification(id){
   }, 1200);
 }
 
+
+// ── INDICATEUR DÉFILEMENT ONGLETS ──
+function checkTabsScroll(){
+  const tabsEl = document.getElementById('tabs-scroll');
+  const fadeEl = document.getElementById('tabs-fade');
+  if(!tabsEl || !fadeEl) return;
+  const peutDefiler = tabsEl.scrollWidth > tabsEl.clientWidth;
+  const pasAuBout = (tabsEl.scrollLeft + tabsEl.clientWidth) < (tabsEl.scrollWidth - 5);
+  fadeEl.classList.toggle('show', peutDefiler && pasAuBout);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const tabsEl = document.getElementById('tabs-scroll');
+  if(tabsEl){
+    checkTabsScroll();
+    tabsEl.addEventListener('scroll', checkTabsScroll);
+    window.addEventListener('resize', checkTabsScroll);
+  }
+});
+
 initA();initN();
+setTimeout(checkTabsScroll, 100);
 updateTabStats();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 </script>
